@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Mini App</title>
+    <!-- Подключаем скрипт Telegram WebApp -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app">
+        <!-- Главный экран -->
+        <div id="home-screen" class="screen active">
+            <h1>Learn English 🇬🇧</h1>
+            <p>Выберите ваш уровень:</p>
+            <div class="levels-container">
+                <button class="level-btn" onclick="startLevel('A0')">Beginner (A0)</button>
+                <button class="level-btn" onclick="startLevel('A1')">Elementary (A1)</button>
+                <button class="level-btn" onclick="startLevel('A2')">Pre-Intermediate (A2)</button>
+            </div>
+            
+            <div class="premium-banner" id="premium-banner" style="display: none;">
+                🔒 Premium доступ открыт!
+            </div>
+            <button id="buy-subscription" class="sub-btn">Купить подписку (Demo)</button>
+        </div>
+
+        <!-- Экран урока -->
+        <div id="lesson-screen" class="screen">
+            <div class="progress-bar">
+                <div id="progress-fill" style="width: 0%"></div>
+            </div>
+            <h2 id="question-text">Вопрос...</h2>
+            <div id="answers-container" class="answers-grid">
+                <!-- Кнопки ответов появятся здесь -->
+            </div>
+        </div>
+
+        <!-- Экран результата -->
+        <div id="result-screen" class="screen">
+            <h2>Урок завершен! 🎉</h2>
+            <p>Ваш результат: <span id="score">0</span> из <span id="total">0</span></p>
+            <button class="level-btn" onclick="goHome()">На главную</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
