@@ -1,153 +1,254 @@
-:root {
-    --bg-color: var(--tg-theme-bg-color, #fff);
-    --text-color: var(--tg-theme-text-color, #000);
-    --button-color: var(--tg-theme-button-color, #3390ec);
-    --button-text-color: var(--tg-theme-button-text-color, #fff);
-    --secondary-bg: var(--tg-theme-secondary-bg-color, #f1f1f1);
-    --logo-color: #00e5ff; /* Яркий голубой, как на картинке */
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+// === ДАННЫЕ ===
+const LEVELS = ['A0', 'A1', 'A2', 'B1', 'B2'];
+const LESSONS_PER_LEVEL = 4;
+
+// Генерация заглушек для демо (замени на реальные данные)
+function generateLessonData(level, index) {
+    const topics = ['Основы', 'Еда', 'Семья', 'Распорядок', 'Путешествия', 'Работа', 'Хобби', 'Новости'];
+    const topic = topics[(index + LEVELS.indexOf(level)) % topics.length];
+    
+    // Теория (3 шага)
+    const theorySteps = [
+        `📘 Тема: ${topic} (${level})<br><br>В этом уроке мы разберём базовые конструкции. Например, глагол <b>to be</b> используется для описания состояния.`,
+        `📝 Лексика:<br>• Apple - Яблоко<br>• Water - Вода<br>• Book - Книга<br><br>Обрати внимание на порядок слов в английском: Подлежащее + Сказуемое.`,
+        `💡 Совет: Не бойся ошибаться! Практика важнее теории. Нажми "Далее", чтобы перейти к тесту из 20 вопросов.`
+    ];
+
+    // 20 вопросов (шаблон)
+    const questions = Array.from({ length: 20 }, (_, i) => ({
+        question: `Вопрос ${i + 1} по теме "${topic}" (${level})?`,
+        answers: ['Вариант A', 'Вариант B', 'Вариант C', 'Вариант D'],
+        correct: i % 4 // Правильный ответ циклически меняется
+    }));
+
+    return { id: `${level}_L${index + 1}`, title: `Урок ${index + 1}: ${topic}`, theory: theorySteps, questions };
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden; /* Чтобы не скроллилось во время заставки */
+// Инициализация базы данных
+const DB = {};
+LEVELS.forEach(l => {
+    DB[l] = Array.from({ length: LESSONS_PER_LEVEL }, (_, i) => generateLessonData(l, i));
+});
+
+// === СОСТОЯНИЕ ПОЛЬЗОВАТЕЛЯ ===
+let state = {
+    points: 0,
+    currentLevel: 'A0',
+    isPremium: false,
+    lessons: {} // { 'A0_L1': { completed: false, theoryViewed: false, score: 0 } }
+};
+
+function loadState() {
+    const saved = localStorage.getItem('aevi_progress');
+    if (saved) state = JSON.parse(saved);
 }
 
-#app {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    text-align: center;
+function saveState() {
+    localStorage.setItem('aevi_progress', JSON.stringify(state));
+    updateUI();
 }
 
-.screen {
-    display: none;
-    animation: fadeIn 0.3s ease;
+// === UI РЕНДЕРИНГ ===
+function updateUI() {
+    document.getElementById('points-display').textContent = state.points;
+    document.getElementById('sub-banner').style.display = state.isPremium ? 'none' : 'block';
+    document.getElementById('premium-btn').textContent = state.isPremium ? '✅ Подписка активна' : '🔓 Получить подписку';
+    renderLevels();
+    renderLessons();
 }
 
-.screen.active {
-    display: block;
+function renderLevels() {
+    const container = document.getElementById('levels-container');
+    container.innerHTML = '';
+    LEVELS.forEach(l => {
+        const btn = document.createElement('button');
+        btn.className = `level-chip ${state.currentLevel === l ? 'active' : ''}`;
+        btn.textContent = l;
+        btn.onclick = () => {
+            if ((l === 'B1' || l === 'B2') && !state.isPremium) {
+                tg.showPopup({ title: 'Подписка', message: 'Уровни B1-B2 доступны по подписке', buttons: [{ type: 'ok' }] });
+                return;
+            }
+            state.currentLevel = l;
+            saveState();
+        };
+        container.appendChild(btn);
+    });
 }
 
-/* Стили для заставки */
-#splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg-color);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+function renderLessons() {
+    const container = document.getElementById('lessons-container');
+    container.innerHTML = '';
+    const lessons = DB[state.currentLevel];
+    
+    lessons.forEach((lesson, idx) => {
+        const prog = state.lessons[lesson.id] || { completed: false, theoryViewed: false, score: 0 };
+        const isLocked = !state.isPremium && idx > 0 && (state.currentLevel === 'B1' || state.currentLevel === 'B2');
+        
+        const card = document.createElement('div');
+        card.className = `lesson-card ${prog.completed ? 'completed' : ''} ${isLocked ? 'locked' : ''}`;
+        card.innerHTML = `
+            <div class="theory-icon" onclick="openTheory('${lesson.id}')">?</div>
+            <div class="title">${lesson.title}</div>
+            <div class="status">${prog.completed ? '✅ Пройден' : (isLocked ? '🔒locked' : '▶️ Доступен')}</div>
+        `;
+        card.onclick = (e) => {
+            if (e.target.classList.contains('theory-icon')) return;
+            if (isLocked) return;
+            startLesson(lesson.id);
+        };
+        container.appendChild(card);
+    });
 }
 
-.logo-container {
-    text-align: center;
+// === ЛОГИКА ЭКРАНОВ ===
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
 }
 
-.logo-text {
-    font-size: 64px;
-    font-weight: bold;
-    color: var(--logo-color);
-    letter-spacing: 4px;
-    margin: 0;
-    animation: pulse 1.5s infinite alternate;
+function goHome() {
+    showScreen('home-screen');
+    updateUI();
 }
 
-@keyframes pulse {
-    from { opacity: 0.8; transform: scale(1); }
-    to { opacity: 1; transform: scale(1.05); }
+// Подписка (демо)
+document.getElementById('premium-btn').onclick = () => {
+    state.isPremium = true;
+    tg.showPopup({ title: 'Ура!', message: 'Подписка активирована. Все уровни разблокированы!', buttons: [{ type: 'ok' }] });
+    saveState();
+};
+
+// Теория
+let currentTheoryLessonId = null;
+let theoryStep = 0;
+
+function openTheory(lessonId) {
+    currentTheoryLessonId = lessonId;
+    const lesson = findLesson(lessonId);
+    document.getElementById('theory-title').textContent = lesson.title;
+    theoryStep = 0;
+    renderTheoryStep();
+    showScreen('theory-screen');
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+function renderTheoryStep() {
+    const lesson = findLesson(currentTheoryLessonId);
+    const content = document.getElementById('theory-content');
+    content.innerHTML = lesson.theory[theoryStep];
+    document.getElementById('theory-next-btn').textContent = theoryStep < lesson.theory.length - 1 ? 'Далее →' : 'К тесту 🚀';
 }
 
-h1, h2 {
-    margin-bottom: 20px;
+document.getElementById('theory-next-btn').onclick = () => {
+    const lesson = findLesson(currentTheoryLessonId);
+    if (theoryStep < lesson.theory.length - 1) {
+        theoryStep++;
+        renderTheoryStep();
+    } else {
+        // Помечаем теорию как просмотренную
+        if (!state.lessons[lesson.id]) state.lessons[lesson.id] = { completed: false, theoryViewed: false, score: 0 };
+        state.lessons[lesson.id].theoryViewed = true;
+        saveState();
+        startQuiz(lesson.id);
+    }
+};
+
+// Тест
+let currentQuizLessonId = null;
+let quizIndex = 0;
+let quizScore = 0;
+
+function startLesson(lessonId) {
+    const prog = state.lessons[lessonId];
+    // Если теория не просмотрена (первый раз), идём в теорию. Иначе сразу в тест.
+    if (!prog || !prog.theoryViewed) {
+        openTheory(lessonId);
+    } else {
+        startQuiz(lessonId);
+    }
 }
 
-.level-btn, .sub-btn {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 12px;
-    background-color: var(--button-color);
-    color: var(--button-text-color);
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.1s;
+function startQuiz(lessonId) {
+    currentQuizLessonId = lessonId;
+    quizIndex = 0;
+    quizScore = 0;
+    showScreen('quiz-screen');
+    loadQuestion();
 }
 
-.level-btn:active {
-    transform: scale(0.98);
+function findLesson(id) {
+    for (const l of LEVELS) {
+        const found = DB[l].find(x => x.id === id);
+        if (found) return found;
+    }
+    return null;
 }
 
-.sub-btn {
-    background-color: #ffcc00;
-    color: #000;
+function loadQuestion() {
+    const lesson = findLesson(currentQuizLessonId);
+    const q = lesson.questions[quizIndex];
+    
+    document.getElementById('quiz-step').textContent = quizIndex + 1;
+    document.getElementById('quiz-fill').style.width = `${((quizIndex + 1) / 20) * 100}%`;
+    document.getElementById('quiz-question').textContent = q.question;
+    
+    const opts = document.getElementById('quiz-options');
+    opts.innerHTML = '';
+    q.answers.forEach((ans, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = ans;
+        btn.onclick = () => handleAnswer(i, q.correct, btn);
+        opts.appendChild(btn);
+    });
 }
 
-.answers-grid {
-    display: grid;
-    gap: 10px;
-    margin-top: 20px;
+function handleAnswer(selected, correct, btn) {
+    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+    
+    if (selected === correct) {
+        btn.classList.add('correct');
+        quizScore++;
+        tg.HapticFeedback?.notificationOccurred('success');
+    } else {
+        btn.classList.add('wrong');
+        document.querySelectorAll('.option-btn')[correct].classList.add('correct');
+        tg.HapticFeedback?.notificationOccurred('error');
+    }
+    
+    setTimeout(() => {
+        quizIndex++;
+        if (quizIndex < 20) {
+            loadQuestion();
+        } else {
+            finishQuiz();
+        }
+    }, 800);
 }
 
-.answer-btn {
-    padding: 15px;
-    border: 2px solid var(--button-color);
-    background: transparent;
-    color: var(--text-color);
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
+function finishQuiz() {
+    const lesson = findLesson(currentQuizLessonId);
+    const pointsEarned = quizScore * 10; // 10 баллов за ответ
+    
+    state.points += pointsEarned;
+    state.lessons[lesson.id] = { completed: true, theoryViewed: true, score: quizScore };
+    saveState();
+    
+    document.getElementById('result-correct').textContent = quizScore;
+    document.getElementById('result-points').textContent = pointsEarned;
+    showScreen('result-screen');
 }
 
-.answer-btn.correct {
-    background-color: #4caf50;
-    border-color: #4caf50;
-    color: white;
-}
-
-.answer-btn.wrong {
-    background-color: #f44336;
-    border-color: #f44336;
-    color: white;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 6px;
-    background-color: var(--secondary-bg);
-    border-radius: 3px;
-    margin-bottom: 20px;
-    overflow: hidden;
-}
-
-#progress-fill {
-    height: 100%;
-    background-color: var(--button-color);
-    transition: width 0.3s ease;
-}
-
-.premium-banner {
-    margin: 20px 0;
-    padding: 10px;
-    background: #e8f5e9;
-    color: #2e7d32;
-    border-radius: 8px;
-}
+// === ЗАПУСК ===
+window.addEventListener('load', () => {
+    loadState();
+    updateUI();
+    
+    setTimeout(() => {
+        document.getElementById('splash-screen').style.display = 'none';
+        showScreen('home-screen');
+    }, 5000);
+});
