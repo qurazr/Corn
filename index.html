@@ -3,32 +3,369 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aevi</title>
+  <title>Aevi | Language Learning</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0a0a0f; font-family: system-ui; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    #app { max-width: 600px; width: 100%; }
-    .card { background: #111; padding: 24px; border-radius: 24px; border: 1px solid #0aff9d; }
-    h2 { color: #0aff9d; margin-bottom: 16px; }
-    .option { background: #1e1e2e; padding: 12px; margin: 8px 0; border-radius: 40px; cursor: pointer; text-align: center; }
-    .option:hover { background: #0aff9d33; }
-    .selected { background: #0aff9d; color: black; }
-    button { background: #0aff9d; border: none; padding: 12px; border-radius: 40px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 12px; }
-    .progress { height: 4px; background: #333; border-radius: 4px; margin-top: 16px; }
-    .progress-fill { height: 100%; background: #0aff9d; width: 0%; border-radius: 4px; }
+    body { background: #0a0a0f; font-family: 'Inter', system-ui, sans-serif; color: #eef5ff; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 1rem; }
+    #app { max-width: 800px; width: 100%; }
+    .card { background: rgba(15, 20, 30, 0.75); backdrop-filter: blur(10px); border: 1px solid rgba(10, 255, 157, 0.3); border-radius: 28px; padding: 1.8rem; box-shadow: 0 0 15px rgba(10, 255, 157, 0.2); }
+    h2 { font-size: 1.8rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #ffffff, #a0f0ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .sub { color: #9aaebf; margin-bottom: 1.5rem; }
+    .option { background: #0f141c; padding: 12px 18px; border-radius: 40px; cursor: pointer; border: 1px solid #2c3a4a; margin-bottom: 8px; text-align: center; transition: all 0.2s; }
+    .option:hover { border-color: #0aff9d; box-shadow: 0 0 6px #0aff9d; }
+    .selected { background: #0aff9d20; border-color: #0aff9d; color: #ccffdd; }
+    .btn { background: linear-gradient(95deg, #0aff9d, #00c3ff); border: none; padding: 12px 28px; border-radius: 60px; font-weight: 700; font-size: 1rem; color: #0a0f1a; cursor: pointer; width: 100%; margin-top: 1rem; transition: 0.2s; }
+    .btn:hover { transform: scale(0.98); box-shadow: 0 0 18px #0aff9d; }
+    .btn-small { background: linear-gradient(95deg, #0aff9d, #00c3ff); border: none; padding: 8px 16px; border-radius: 60px; font-weight: 600; cursor: pointer; margin-top: 0.5rem; }
+    .progress { margin: 20px 0 10px; height: 6px; background: #1e2a32; border-radius: 10px; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #0aff9d, #00c3ff); }
+    .word-list { margin: 20px 0; }
+    .word-item { background: #0b1018; padding: 12px 18px; border-radius: 20px; display: flex; justify-content: space-between; margin-bottom: 8px; border-left: 4px solid #0aff9d; }
+    .practice-question { background: #11161f; border-radius: 24px; padding: 1.2rem; margin-bottom: 1.2rem; }
+    .practice-input { background: #0a0f16; border: 1px solid #2a3a4a; border-radius: 40px; padding: 12px 18px; width: 100%; color: white; margin: 12px 0; }
+    .correct { color: #0aff9d; }
+    .wrong { color: #ff5e7c; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .score { font-size: 1.3rem; font-weight: 700; color: #0aff9d; }
+    .button-group { display: flex; gap: 1rem; margin-top: 1rem; }
+    select { background: #0f141c; border: 1px solid #2c3a4a; border-radius: 60px; padding: 12px 20px; width: 100%; color: white; font-size: 1rem; margin-bottom: 1rem; }
+    
+    /* СПЛЕШ-ЭКРАН */
+    .splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0f; display: flex; justify-content: center; align-items: center; z-index: 10000; transition: opacity 1s ease; }
+    .splash-content { text-align: center; animation: pulse 1.2s ease-in-out infinite; }
+    .splash-logo { font-size: 5rem; font-weight: 800; background: linear-gradient(135deg, #bfffc7, #7df9ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .splash-glow { width: 120px; height: 4px; margin: 25px auto 0; background: linear-gradient(90deg, #0aff9d, #00c3ff); border-radius: 4px; animation: widthPulse 1s ease-in-out infinite; }
+    .splash-timer { font-size: 2.5rem; margin-top: 30px; color: #0aff9d; font-family: monospace; }
+    @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.03); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+    @keyframes widthPulse { 0% { width: 80px; } 50% { width: 160px; } 100% { width: 80px; } }
   </style>
 </head>
 <body>
   <div id="app"></div>
+
   <script>
-    // ПРОСТЕЙШИЙ ТЕСТ
-    document.getElementById('app').innerHTML = `
-      <div class="card">
-        <h2>🌙 Aevi</h2>
-        <p style="color:white;">Если ты это видишь — приложение работает!</p>
-        <button onclick="alert('Привет!')">Нажми меня</button>
-      </div>
-    `;
+    // ------------------- UTILITY -------------------
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // ------------------- AI GENERATOR -------------------
+    function generateLesson(level, language) {
+      const translations = {
+        hello: { English: 'hello', Spanish: 'hola', French: 'bonjour', German: 'hallo' },
+        goodbye: { English: 'goodbye', Spanish: 'adiós', French: 'au revoir', German: 'auf wiedersehen' },
+        please: { English: 'please', Spanish: 'por favor', French: 's\'il vous plaît', German: 'bitte' },
+        thanks: { English: 'thanks', Spanish: 'gracias', French: 'merci', German: 'danke' },
+        yes: { English: 'yes', Spanish: 'sí', French: 'oui', German: 'ja' },
+        no: { English: 'no', Spanish: 'no', French: 'non', German: 'nein' }
+      };
+      
+      const words = ['hello', 'goodbye', 'please', 'thanks', 'yes', 'no'];
+      let vocab = words.map(w => ({ word: w, translation: translations[w][language] || w }));
+      
+      const theory = `📘 <strong>Основы ${language}</strong><br><br>Порядок слов — SVO. Пример: "I learn ${language}".<br>✅ Артикли важны.`;
+      
+      const tasks = [];
+      for (let i = 0; i < 20; i++) {
+        const wordObj = vocab[i % vocab.length];
+        if (i < 10) {
+          let options = [wordObj.translation, '❌ ошибка1', '❌ ошибка2'];
+          options = shuffleArray([...options]);
+          tasks.push({
+            type: 'choice',
+            question: `Перевод "${wordObj.word}":`,
+            options: options,
+            correct: wordObj.translation
+          });
+        } else {
+          tasks.push({
+            type: 'translate',
+            question: `Переведите: "${wordObj.word}"`,
+            correct: wordObj.translation.toLowerCase()
+          });
+        }
+      }
+      return { theory, vocabulary: vocab, practice: tasks };
+    }
+
+    // ------------------- СОХРАНЕНИЕ -------------------
+    function saveProgress() {
+      localStorage.setItem('aevi_progress', JSON.stringify({
+        currentScreen, userLevel, currentLang, levelAnswers,
+        currentLesson, practiceAnswers, practiceResults, currentPracticeIndex
+      }));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem('aevi_progress');
+      if (!saved) return false;
+      const data = JSON.parse(saved);
+      currentScreen = data.currentScreen;
+      userLevel = data.userLevel;
+      currentLang = data.currentLang;
+      levelAnswers = data.levelAnswers || [];
+      currentLesson = data.currentLesson;
+      practiceAnswers = data.practiceAnswers || new Array(20).fill(null);
+      practiceResults = data.practiceResults || new Array(20).fill(false);
+      currentPracticeIndex = data.currentPracticeIndex || 0;
+      return true;
+    }
+
+    function resetProgress() {
+      localStorage.removeItem('aevi_progress');
+      currentScreen = 'levelTest';
+      userLevel = null;
+      currentLang = 'English';
+      levelAnswers = [];
+      currentLesson = null;
+      practiceAnswers = new Array(20).fill(null);
+      practiceResults = new Array(20).fill(false);
+      currentPracticeIndex = 0;
+      render();
+    }
+
+    // ------------------- STATE -------------------
+    let currentScreen = 'levelTest';
+    let userLevel = null;
+    let currentLang = 'English';
+    let levelAnswers = [];
+    let currentLesson = null;
+    let practiceAnswers = new Array(20).fill(null);
+    let practiceResults = new Array(20).fill(false);
+    let currentPracticeIndex = 0;
+
+    const levelQuestions = [
+      { text: 'She ___ to school every day.', options: ['go', 'goes', 'going', 'went'], correct: 'goes' },
+      { text: 'Синоним "быстрый"?', options: ['медленный', 'скорый', 'тихий', 'глубокий'], correct: 'скорый' },
+      { text: 'Как "собака" по-английски?', options: ['cat', 'dog', 'bird', 'fish'], correct: 'dog' },
+      { text: 'Время в "I have seen"?', options: ['Present Simple', 'Past Simple', 'Present Perfect', 'Future'], correct: 'Present Perfect' },
+      { text: 'I am interested ___ learning.', options: ['in', 'on', 'at', 'for'], correct: 'in' }
+    ];
+
+    // ------------------- RENDER -------------------
+    function render() {
+      const app = document.getElementById('app');
+      if (!app) return;
+      
+      if (currentScreen === 'levelTest') renderLevelTest(app);
+      else if (currentScreen === 'languageSelect') renderLanguageSelect(app);
+      else if (currentScreen === 'theory') renderTheory(app);
+      else if (currentScreen === 'practice') renderPractice(app);
+      saveProgress();
+    }
+
+    function renderLevelTest(container) {
+      const answeredCount = levelAnswers.length;
+      const currentQ = levelQuestions[answeredCount];
+      
+      if (!currentQ) {
+        let correct = levelAnswers.filter((a,i) => a === levelQuestions[i].correct).length;
+        userLevel = correct <= 2 ? 'beginner' : correct <= 4 ? 'intermediate' : 'advanced';
+        currentScreen = 'languageSelect';
+        render();
+        return;
+      }
+      
+      container.innerHTML = `
+        <div class="card">
+          <h2>🌙 Оценка уровня</h2>
+          <div class="sub">Вопрос ${answeredCount+1} из ${levelQuestions.length}</div>
+          ${currentQ.options.map(opt => `<div class="option" data-value="${opt}">${opt}</div>`).join('')}
+          <button class="btn" id="nextBtn">${answeredCount+1 === levelQuestions.length ? 'Завершить' : 'Далее'}</button>
+          <div class="progress"><div class="progress-fill" style="width:${(answeredCount/levelQuestions.length)*100}%"></div></div>
+        </div>
+      `;
+      
+      document.querySelectorAll('.option').forEach(el => {
+        el.addEventListener('click', () => {
+          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          el.classList.add('selected');
+          levelAnswers[answeredCount] = el.dataset.value;
+        });
+      });
+      
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        if (levelAnswers[answeredCount]) render();
+      });
+    }
+
+    function renderLanguageSelect(container) {
+      const levelNames = { beginner: 'Начинающий', intermediate: 'Средний', advanced: 'Продвинутый' };
+      container.innerHTML = `
+        <div class="card">
+          <h2>✨ Выбери язык</h2>
+          <div class="sub">Твой уровень: ${levelNames[userLevel]}</div>
+          <select id="langSelect">
+            <option value="English">🇬🇧 Английский</option>
+            <option value="Spanish">🇪🇸 Испанский</option>
+            <option value="French">🇫🇷 Французский</option>
+            <option value="German">🇩🇪 Немецкий</option>
+          </select>
+          <button class="btn" id="generateBtn">🚀 Сгенерировать урок</button>
+          <button class="btn-small" id="resetBtn" style="margin-top:1rem;background:#ff5e7c20;color:#ff9eae;">🔄 Сбросить всё</button>
+        </div>
+      `;
+      
+      document.getElementById('langSelect').onchange = (e) => currentLang = e.target.value;
+      document.getElementById('generateBtn').onclick = () => {
+        currentLesson = generateLesson(userLevel, currentLang);
+        practiceAnswers = new Array(20).fill(null);
+        practiceResults = new Array(20).fill(false);
+        currentPracticeIndex = 0;
+        currentScreen = 'theory';
+        render();
+      };
+      document.getElementById('resetBtn').onclick = () => {
+        if (confirm('Сбросить весь прогресс?')) resetProgress();
+      };
+    }
+
+    function renderTheory(container) {
+      container.innerHTML = `
+        <div class="card">
+          <h2>📖 Теория — ${currentLang}</h2>
+          <div style="margin:20px 0">${currentLesson.theory}</div>
+          <strong>📚 Словарь</strong>
+          <div class="word-list">
+            ${currentLesson.vocabulary.map(w => `<div class="word-item"><span>${w.word}</span><span>${w.translation}</span></div>`).join('')}
+          </div>
+          <button class="btn" id="startPractice">🎯 К практике (20 заданий)</button>
+          <button class="btn-small" id="resetBtn" style="margin-top:1rem;background:#ff5e7c20;color:#ff9eae;">🔄 Сбросить всё</button>
+        </div>
+      `;
+      document.getElementById('startPractice').onclick = () => {
+        currentScreen = 'practice';
+        render();
+      };
+      document.getElementById('resetBtn').onclick = () => {
+        if (confirm('Сбросить весь прогресс?')) resetProgress();
+      };
+    }
+
+    function renderPractice(container) {
+      const total = currentLesson.practice.length;
+      const q = currentLesson.practice[currentPracticeIndex];
+      const userAnswer = practiceAnswers[currentPracticeIndex] || '';
+      const isAnswered = practiceAnswers[currentPracticeIndex] !== null;
+      
+      let html = `
+        <div class="card">
+          <div class="flex-between"><h2>✍️ Практика</h2><div class="score">✅ ${practiceResults.filter(r=>r===true).length}/${total}</div></div>
+          <div class="progress"><div class="progress-fill" style="width:${(currentPracticeIndex/total)*100}%"></div></div>
+          <div class="practice-question">
+            <strong>${currentPracticeIndex+1}/${total}</strong>
+            <p style="margin:12px 0">${q.question}</p>
+      `;
+      
+      if (q.type === 'choice') {
+        html += `<div>${q.options.map(opt => `<div class="option" data-choice="${opt}">${opt}</div>`).join('')}</div>`;
+      } else {
+        html += `<input type="text" id="answerInput" class="practice-input" placeholder="Ваш ответ..." value="${userAnswer}">`;
+      }
+      
+      if (isAnswered) {
+        html += `<div class="${practiceResults[currentPracticeIndex] ? 'correct' : 'wrong'}">${practiceResults[currentPracticeIndex] ? '✓ Верно!' : '✗ Ошибка. Правильно: ' + q.correct}</div>`;
+      }
+      
+      html += `<button class="btn" id="checkBtn">${isAnswered ? 'Изменить' : 'Проверить'}</button>`;
+      if (currentPracticeIndex + 1 < total) {
+        html += `<button class="btn" id="nextBtn" style="margin-top:0.5rem">Далее →</button>`;
+      } else {
+        html += `<button class="btn" id="finishBtn" style="margin-top:0.5rem">🏆 Завершить</button>`;
+      }
+      html += `<button class="btn-small" id="backBtn" style="margin-top:0.5rem">← К теории</button>`;
+      html += `<button class="btn-small" id="resetBtn" style="margin-top:0.5rem;background:#ff5e7c20;color:#ff9eae;">🔄 Сбросить всё</button>`;
+      html += `</div></div>`;
+      
+      container.innerHTML = html;
+      
+      if (q.type !== 'choice') {
+        const input = document.getElementById('answerInput');
+        if (input && !isAnswered) input.focus();
+      }
+      
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.onclick = () => {
+          if (isAnswered) return;
+          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        };
+      });
+      
+      document.getElementById('checkBtn').onclick = () => {
+        let answer = '';
+        if (q.type === 'choice') {
+          const selected = document.querySelector('.option.selected');
+          if (!selected) return;
+          answer = selected.dataset.choice;
+        } else {
+          answer = document.getElementById('answerInput')?.value.trim().toLowerCase() || '';
+        }
+        practiceAnswers[currentPracticeIndex] = answer;
+        practiceResults[currentPracticeIndex] = (answer === q.correct.toLowerCase());
+        render();
+      };
+      
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        if (practiceAnswers[currentPracticeIndex] !== null) {
+          currentPracticeIndex++;
+          render();
+        }
+      });
+      
+      document.getElementById('finishBtn')?.addEventListener('click', () => {
+        alert(`✨ Результат: ${practiceResults.filter(r=>r===true).length}/20`);
+        currentScreen = 'theory';
+        render();
+      });
+      
+      document.getElementById('backBtn').onclick = () => {
+        currentScreen = 'theory';
+        render();
+      };
+      
+      document.getElementById('resetBtn').onclick = () => {
+        if (confirm('Сбросить весь прогресс?')) resetProgress();
+      };
+    }
+
+    // ------------------- СПЛЕШ НА 5 СЕКУНД -------------------
+    function showSplash() {
+      const splash = document.createElement('div');
+      splash.className = 'splash-screen';
+      splash.innerHTML = `
+        <div class="splash-content">
+          <div class="splash-logo">Aevi</div>
+          <div class="splash-glow"></div>
+          <div class="splash-timer" id="splashTimer">5</div>
+        </div>
+      `;
+      document.body.appendChild(splash);
+      
+      let seconds = 5;
+      const timerEl = splash.querySelector('#splashTimer');
+      
+      const interval = setInterval(() => {
+        seconds--;
+        if (timerEl) timerEl.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          splash.style.opacity = '0';
+          setTimeout(() => {
+            splash.remove();
+            loadProgress();
+            render();
+          }, 1000);
+        }
+      }, 1000);
+    }
+
+    // ЗАПУСК
+    showSplash();
   </script>
 </body>
 </html>
