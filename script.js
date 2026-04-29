@@ -202,7 +202,7 @@ function render() {
   else if (currentScreen === 'theory') renderTheory(app);
   else if (currentScreen === 'practice') renderPractice(app);
   
-  saveProgress(); // сохраняем после каждого рендера
+  saveProgress();
 }
 
 function renderLevelTest(container) {
@@ -411,11 +411,9 @@ function renderPractice(container) {
     render();
   });
   
-  // ⚠️ Кнопка выхода из практики с предупреждением
   document.getElementById('exitPracticeBtn')?.addEventListener('click', () => {
     const confirmed = confirm('⚠️ ВНИМАНИЕ! Если вы выйдете из практики, прогресс этого урока (все ответы) будет потерян. Вы уверены?');
     if (confirmed) {
-      // Удаляем только прогресс текущего урока, но сохраняем уровень и язык
       practiceAnswers = new Array(20).fill(null);
       practiceResults = new Array(20).fill(false);
       currentPracticeIndex = 0;
@@ -441,12 +439,40 @@ function renderPractice(container) {
   }
 }
 
-// ------------------- ЗАПУСК С ЗАГРУЗКОЙ ПРОГРЕССА -------------------
-document.addEventListener('DOMContentLoaded', () => {
+// ------------------- ЗАПУСК СО СПЛЕШ-ЭКРАНОМ (ИСПРАВЛЕННЫЙ) -------------------
+document.addEventListener('DOMContentLoaded', function() {
+  // Создаём сплеш-экран и сразу добавляем в body
+  const splashDiv = document.createElement('div');
+  splashDiv.id = 'splash';
+  splashDiv.className = 'splash-screen';
+  splashDiv.innerHTML = `
+    <div class="splash-content">
+      <div class="splash-logo">Aevi</div>
+      <div class="splash-glow"></div>
+    </div>
+  `;
+  document.body.appendChild(splashDiv);
+  
+  // Загружаем прогресс
   const loaded = loadProgress();
   if (loaded && currentLesson) {
-    // проверяем, что урок не сломался (можно добавить валидацию)
     console.log('Прогресс загружен');
   }
+  
+  // Запускаем рендер основного приложения
   render();
+  
+  // Через 1.8 секунды плавно убираем сплеш
+  setTimeout(function() {
+    const splash = document.getElementById('splash');
+    if (splash) {
+      splash.style.transition = 'opacity 0.5s ease';
+      splash.style.opacity = '0';
+      setTimeout(function() {
+        if (splash && splash.parentNode) {
+          splash.remove();
+        }
+      }, 500);
+    }
+  }, 1800);
 });
