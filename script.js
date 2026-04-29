@@ -1,75 +1,189 @@
-// ------------------- FAKE AI GENERATOR (имитация DeepSeek API) -------------------
-// на основе уровня и языка генерирует урок (теория, словарь, 20 заданий разных типов)
+// ------------------- UTILITY -------------------
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ------------------- AI GENERATOR -------------------
 function generateLesson(level, language) {
   const levels = { beginner: 'A1', intermediate: 'B1', advanced: 'C1' };
   const lvl = levels[level] || 'B1';
 
-  const commonVocab = {
-    beginner: [{ word: 'hello', translation: 'hola' }, { word: 'goodbye', translation: 'adiós' }, { word: 'please', translation: 'por favor' }, { word: 'thanks', translation: 'gracias' }, { word: 'yes', translation: 'sí' }, { word: 'no', translation: 'no' }],
-    intermediate: [{ word: 'therefore', translation: 'por lo tanto' }, { word: 'although', translation: 'aunque' }, { word: 'develop', translation: 'desarrollar' }, { word: 'achieve', translation: 'lograr' }, { word: 'significant', translation: 'significativo' }, { word: 'nevertheless', translation: 'sin embargo' }],
-    advanced: [{ word: 'ubiquitous', translation: 'ubicuo' }, { word: 'mitigate', translation: 'mitigar' }, { word: 'cogent', translation: 'convincente' }, { word: 'dichotomy', translation: 'dicotomía' }, { word: 'pedagogy', translation: 'pedagogía' }, { word: 'ephemeral', translation: 'efímero' }]
+  const vocabByLevel = {
+    beginner: [
+      { word: 'hello', translation: getTranslation('hello', language) },
+      { word: 'goodbye', translation: getTranslation('goodbye', language) },
+      { word: 'please', translation: getTranslation('please', language) },
+      { word: 'thanks', translation: getTranslation('thanks', language) },
+      { word: 'yes', translation: getTranslation('yes', language) },
+      { word: 'no', translation: getTranslation('no', language) }
+    ],
+    intermediate: [
+      { word: 'therefore', translation: getTranslation('therefore', language) },
+      { word: 'although', translation: getTranslation('although', language) },
+      { word: 'develop', translation: getTranslation('develop', language) },
+      { word: 'achieve', translation: getTranslation('achieve', language) },
+      { word: 'significant', translation: getTranslation('significant', language) },
+      { word: 'nevertheless', translation: getTranslation('nevertheless', language) }
+    ],
+    advanced: [
+      { word: 'ubiquitous', translation: getTranslation('ubiquitous', language) },
+      { word: 'mitigate', translation: getTranslation('mitigate', language) },
+      { word: 'cogent', translation: getTranslation('cogent', language) },
+      { word: 'dichotomy', translation: getTranslation('dichotomy', language) },
+      { word: 'pedagogy', translation: getTranslation('pedagogy', language) },
+      { word: 'ephemeral', translation: getTranslation('ephemeral', language) }
+    ]
   };
 
-  let vocab = commonVocab[level] || commonVocab.intermediate;
-  // адаптируем под выбранный язык (демо: заменяем перевод в духе языка)
-  const langMap = { Spanish: 'es', French: 'fr', German: 'de' };
-  const langCode = langMap[language] || 'es';
-  if (language !== 'Spanish') {
-    vocab = vocab.map(v => ({ word: v.word, translation: `[${language}] ${v.word}` }));
-  }
+  let vocab = vocabByLevel[level] || vocabByLevel.intermediate;
 
-  const teorias = {
-    beginner: `В ${language} базовый порядок слов — SVO (Подлежащее-Сказуемое-Дополнение). Например: "I learn ${language}". Артикли важны.`,
-    intermediate: `В ${language} среднего уровня изучим времена группы Perfect и условные предложения. Пример: "If I had studied, I would have passed".`,
-    advanced: `Сослагательное наклонение, сложные союзы и стилистические инверсии в ${language}. Пример: "Never have I seen such a beautiful sunset".`
+  const theoryByLevel = {
+    beginner: `📘 <strong>Основы ${language}</strong><br><br>В ${language} базовый порядок слов — SVO (Подлежащее-Сказуемое-Дополнение).<br>Пример: "${getExampleSentence(language)}"<br><br>✅ Артикли важны: определенный и неопределенный.<br>✅ Глаголы спрягаются по лицам.`,
+    intermediate: `📙 <strong>${language} для среднего уровня</strong><br><br>Изучим времена группы Perfect и условные предложения.<br>📌 Пример: "If I had studied, I would have passed".<br><br>➕ Фразовые глаголы<br>➕ Косвенная речь`,
+    advanced: `📕 <strong>Продвинутый ${language}</strong><br><br>Сослагательное наклонение, сложные союзы и стилистические инверсии.<br>✨ Пример: "Never have I seen such a beautiful sunset".<br><br>🎯 Идиомы и культурные отсылки`
   };
 
-  const theory = teorias[level] + ` Уровень: ${lvl.toUpperCase()}. Фокус на практике.`;
+  const theory = theoryByLevel[level] + `<br><br>🎯 <strong>Твой уровень: ${lvl.toUpperCase()}</strong>`;
 
-  // Генерация 20 заданий разных типов (выбор, перевод ввод, правда/ложь)
   const tasks = [];
   for (let i = 0; i < 20; i++) {
-    let type = (i % 3 === 0) ? 'choice' : (i % 2 === 0) ? 'translate' : 'complete';
-    if (i < 5) type = 'choice';
-    if (i >= 5 && i < 12) type = 'translate';
-    if (i >= 12) type = 'complete';
+    let type;
+    if (i < 6) type = 'choice';
+    else if (i < 12) type = 'translate';
+    else type = 'complete';
 
     if (type === 'choice') {
+      const wordObj = vocab[i % vocab.length];
+      const correct = wordObj.translation;
+      let options = [correct];
+      while (options.length < 3) {
+        const fake = `[неверно] ${vocab[Math.floor(Math.random() * vocab.length)].word}`;
+        if (!options.includes(fake)) options.push(fake);
+      }
+      options = shuffleArray([...options]);
       tasks.push({
         type: 'choice',
-        question: `Выберите правильный перевод слова "${vocab[i % vocab.length].word}":`,
-        options: [vocab[i % vocab.length].translation, `[неверно] ${vocab[(i+1)%vocab.length].word}`, `[неверно] ${vocab[(i+2)%vocab.length].word}`],
-        correct: vocab[i % vocab.length].translation
+        question: `📝 Выберите правильный перевод слова "<strong>${wordObj.word}</strong>":`,
+        options: options,
+        correct: correct
       });
-    } else if (type === 'translate') {
+    } 
+    else if (type === 'translate') {
+      const wordObj = vocab[i % vocab.length];
       tasks.push({
         type: 'translate',
-        question: `Переведите на ${language}: "${vocab[i % vocab.length].word}"`,
-        correct: vocab[i % vocab.length].translation.toLowerCase()
+        question: `✍️ Переведите на ${language}: "<strong>${wordObj.word}</strong>"`,
+        correct: wordObj.translation.toLowerCase()
       });
-    } else {
+    } 
+    else {
       tasks.push({
         type: 'complete',
-        question: `Завершите фразу: "I ___ to learn ${language} yesterday." (started/start)`,
+        question: `🔧 Завершите фразу: "I ___ to learn ${language} yesterday." (started / start / starting)`,
         correct: 'started'
       });
     }
   }
-  // перемешаем немного для натуральности, но порядок фикс
+  
   return { theory, vocabulary: vocab, practice: tasks };
 }
 
+function getTranslation(word, lang) {
+  const dict = {
+    hello: { Spanish: 'hola', French: 'bonjour', German: 'hallo', English: 'hello' },
+    goodbye: { Spanish: 'adiós', French: 'au revoir', German: 'auf wiedersehen', English: 'goodbye' },
+    please: { Spanish: 'por favor', French: 's\'il vous plaît', German: 'bitte', English: 'please' },
+    thanks: { Spanish: 'gracias', French: 'merci', German: 'danke', English: 'thanks' },
+    yes: { Spanish: 'sí', French: 'oui', German: 'ja', English: 'yes' },
+    no: { Spanish: 'no', French: 'non', German: 'nein', English: 'no' },
+    therefore: { Spanish: 'por lo tanto', French: 'donc', German: 'deshalb', English: 'therefore' },
+    although: { Spanish: 'aunque', French: 'bien que', German: 'obwohl', English: 'although' },
+    develop: { Spanish: 'desarrollar', French: 'développer', German: 'entwickeln', English: 'develop' },
+    achieve: { Spanish: 'lograr', French: 'atteindre', German: 'erreichen', English: 'achieve' },
+    significant: { Spanish: 'significativo', French: 'significatif', German: 'bedeutend', English: 'significant' },
+    nevertheless: { Spanish: 'sin embargo', French: 'néanmoins', German: 'trotzdem', English: 'nevertheless' },
+    ubiquitous: { Spanish: 'ubicuo', French: 'ubiquitaire', German: 'allgegenwärtig', English: 'ubiquitous' },
+    mitigate: { Spanish: 'mitigar', French: 'atténuer', German: 'mildern', English: 'mitigate' },
+    cogent: { Spanish: 'convincente', French: 'cogent', German: 'überzeugend', English: 'cogent' },
+    dichotomy: { Spanish: 'dicotomía', French: 'dichotomie', German: 'Dichotomie', English: 'dichotomy' },
+    pedagogy: { Spanish: 'pedagogía', French: 'pédagogie', German: 'Pädagogik', English: 'pedagogy' },
+    ephemeral: { Spanish: 'efímero', French: 'éphémère', German: 'vergänglich', English: 'ephemeral' }
+  };
+  return dict[word]?.[lang] || word;
+}
+
+function getExampleSentence(lang) {
+  const sentences = {
+    Spanish: 'Yo aprendo español',
+    French: 'J\'apprends le français',
+    German: 'Ich lerne Deutsch',
+    English: 'I learn English'
+  };
+  return sentences[lang] || 'I learn language';
+}
+
+// ------------------- СОХРАНЕНИЕ ПРОГРЕССА -------------------
+function saveProgress() {
+  const progress = {
+    currentScreen,
+    userLevel,
+    currentLang,
+    levelAnswers,
+    currentLesson,
+    practiceAnswers,
+    practiceResults,
+    currentPracticeIndex
+  };
+  localStorage.setItem('aevi_progress', JSON.stringify(progress));
+}
+
+function loadProgress() {
+  const saved = localStorage.getItem('aevi_progress');
+  if (!saved) return false;
+  
+  try {
+    const data = JSON.parse(saved);
+    currentScreen = data.currentScreen;
+    userLevel = data.userLevel;
+    currentLang = data.currentLang;
+    levelAnswers = data.levelAnswers || [];
+    currentLesson = data.currentLesson;
+    practiceAnswers = data.practiceAnswers || new Array(20).fill(null);
+    practiceResults = data.practiceResults || new Array(20).fill(false);
+    currentPracticeIndex = data.currentPracticeIndex || 0;
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+function resetProgress() {
+  localStorage.removeItem('aevi_progress');
+  currentScreen = 'levelTest';
+  userLevel = null;
+  currentLang = 'English';
+  levelAnswers = [];
+  currentLesson = null;
+  practiceAnswers = new Array(20).fill(null);
+  practiceResults = new Array(20).fill(false);
+  currentPracticeIndex = 0;
+  render();
+}
+
 // ------------------- STATE -------------------
-let currentScreen = 'levelTest'; // levelTest, languageSelect, lesson, practice
-let userLevel = null; // beginner/intermediate/advanced
-let currentLang = 'Spanish';
+let currentScreen = 'levelTest';
+let userLevel = null;
+let currentLang = 'English';
 let levelAnswers = [];
 let currentLesson = null;
-let practiceAnswers = new Array(20).fill(null); // храним ответы пользователя
+let practiceAnswers = new Array(20).fill(null);
 let practiceResults = new Array(20).fill(false);
 let currentPracticeIndex = 0;
 
-// вопросы для определения уровня (5 шт)
 const levelQuestions = [
   { text: 'Выбери правильную форму: "She ___ to school every day."', options: ['go', 'goes', 'going', 'went'], correct: 'goes' },
   { text: 'Синоним слова "быстрый"?', options: ['медленный', 'скорый', 'тихий', 'глубокий'], correct: 'скорый' },
@@ -83,22 +197,19 @@ function render() {
   const app = document.getElementById('app');
   if (!app) return;
 
-  if (currentScreen === 'levelTest') {
-    renderLevelTest(app);
-  } else if (currentScreen === 'languageSelect') {
-    renderLanguageSelect(app);
-  } else if (currentScreen === 'lesson') {
-    renderLesson(app);
-  } else if (currentScreen === 'practice') {
-    renderPractice(app);
-  }
+  if (currentScreen === 'levelTest') renderLevelTest(app);
+  else if (currentScreen === 'languageSelect') renderLanguageSelect(app);
+  else if (currentScreen === 'theory') renderTheory(app);
+  else if (currentScreen === 'practice') renderPractice(app);
+  
+  saveProgress(); // сохраняем после каждого рендера
 }
 
 function renderLevelTest(container) {
   const answeredCount = levelAnswers.length;
   const currentQ = levelQuestions[answeredCount];
+  
   if (!currentQ && answeredCount === levelQuestions.length) {
-    // подсчёт уровня: сумма правильных
     let correct = 0;
     levelAnswers.forEach((ans, idx) => {
       if (ans === levelQuestions[idx].correct) correct++;
@@ -124,67 +235,92 @@ function renderLevelTest(container) {
       </div>
       <button class="btn" id="nextLevelBtn">${answeredCount+1 === levelQuestions.length ? 'Завершить' : 'Далее'}</button>
       <div class="progress"><div class="progress-fill" style="width:${(answeredCount/levelQuestions.length)*100}%"></div></div>
+      <button class="btn-small" id="resetAllBtn" style="margin-top: 1rem; background: #ff5e7c20; border-color:#ff5e7c; color:#ff9eae;">🔄 Сбросить весь прогресс</button>
     </div>
   `;
+  
   document.querySelectorAll('.option').forEach(el => {
-    el.addEventListener('click', (e) => {
-      const val = el.dataset.value;
-      levelAnswers[answeredCount] = val;
+    el.addEventListener('click', () => {
+      levelAnswers[answeredCount] = el.dataset.value;
       render();
     });
   });
+  
   document.getElementById('nextLevelBtn')?.addEventListener('click', () => {
-    if (!levelAnswers[answeredCount]) return;
-    render(); // перерисовка с переходом
+    if (levelAnswers[answeredCount]) render();
+  });
+  
+  document.getElementById('resetAllBtn')?.addEventListener('click', () => {
+    if (confirm('❓ Точно сбросить ВЕСЬ прогресс? Все ответы и уроки будут удалены.')) {
+      resetProgress();
+    }
   });
 }
 
 function renderLanguageSelect(container) {
+  const levelNames = { beginner: '🌱 Начинающий', intermediate: '🌟 Средний', advanced: '🚀 Продвинутый' };
   container.innerHTML = `
     <div class="card">
       <h2>✨ Выбери язык</h2>
-      <div class="sub">Твой уровень: ${userLevel === 'beginner' ? 'Начинающий' : userLevel === 'intermediate' ? 'Средний' : 'Продвинутый'}</div>
+      <div class="sub">Твой уровень: ${levelNames[userLevel]}</div>
       <select id="langSelect" class="lang-select">
+        <option value="English" ${currentLang === 'English' ? 'selected' : ''}>🇬🇧 Английский</option>
         <option value="Spanish" ${currentLang === 'Spanish' ? 'selected' : ''}>🇪🇸 Испанский</option>
         <option value="French" ${currentLang === 'French' ? 'selected' : ''}>🇫🇷 Французский</option>
         <option value="German" ${currentLang === 'German' ? 'selected' : ''}>🇩🇪 Немецкий</option>
       </select>
       <button class="btn" id="generateLessonBtn">🚀 Сгенерировать ИИ-урок</button>
+      <button class="btn-small" id="resetAllBtn2" style="margin-top: 1rem; background: #ff5e7c20; border-color:#ff5e7c; color:#ff9eae;">🔄 Сбросить весь прогресс</button>
     </div>
   `;
-  document.getElementById('langSelect')?.addEventListener('change', (e) => { currentLang = e.target.value; });
+  
+  document.getElementById('langSelect')?.addEventListener('change', (e) => { currentLang = e.target.value; saveProgress(); });
   document.getElementById('generateLessonBtn')?.addEventListener('click', () => {
-    // генерируем урок на основе уровня и языка
     currentLesson = generateLesson(userLevel, currentLang);
     practiceAnswers = new Array(20).fill(null);
     practiceResults = new Array(20).fill(false);
     currentPracticeIndex = 0;
-    currentScreen = 'lesson';
+    currentScreen = 'theory';
     render();
+  });
+  document.getElementById('resetAllBtn2')?.addEventListener('click', () => {
+    if (confirm('❓ Точно сбросить ВЕСЬ прогресс?')) resetProgress();
   });
 }
 
-function renderLesson(container) {
+function renderTheory(container) {
   if (!currentLesson) return;
   container.innerHTML = `
     <div class="card">
-      <h2>📖 Твой ИИ-урок (${currentLang})</h2>
+      <h2>📖 Теория — ${currentLang}</h2>
       <div class="sub">Уровень: ${userLevel}</div>
-      <div class="theory-block">
-        <strong>🧠 Теория</strong>
-        <p style="margin-top: 8px;">${currentLesson.theory}</p>
+      <div style="margin: 20px 0; line-height: 1.6;">
+        ${currentLesson.theory}
       </div>
-      <div style="margin: 24px 0;"><strong>📚 Словарь</strong>
+      <div style="margin: 24px 0;">
+        <strong>📚 Словарь урока (${currentLesson.vocabulary.length} слов)</strong>
         <div class="word-list">
           ${currentLesson.vocabulary.map(w => `<div class="word-item"><span>${w.word}</span><span style="color:#b0f5ff;">${w.translation}</span></div>`).join('')}
         </div>
       </div>
-      <button class="btn" id="startPracticeBtn">🎯 Перейти к практике (20 заданий)</button>
+      <div class="button-group">
+        <button class="btn-small" id="backToLangBtn">← Назад</button>
+        <button class="btn" id="startPracticeBtn">🎯 К практике (20 заданий)</button>
+      </div>
+      <button class="btn-small" id="resetAllBtn3" style="margin-top: 1rem; background: #ff5e7c20; border-color:#ff5e7c; color:#ff9eae;">🔄 Сбросить весь прогресс</button>
     </div>
   `;
+  
+  document.getElementById('backToLangBtn')?.addEventListener('click', () => {
+    currentScreen = 'languageSelect';
+    render();
+  });
   document.getElementById('startPracticeBtn')?.addEventListener('click', () => {
     currentScreen = 'practice';
     render();
+  });
+  document.getElementById('resetAllBtn3')?.addEventListener('click', () => {
+    if (confirm('❓ Точно сбросить ВЕСЬ прогресс?')) resetProgress();
   });
 }
 
@@ -198,7 +334,7 @@ function renderPractice(container) {
 
   let innerHtml = `
     <div class="card">
-      <div class="flex-between"><h2>✍️ Практика</h2><div class="score">${practiceResults.filter(r=>r===true).length}/${total}</div></div>
+      <div class="flex-between"><h2>✍️ Практика</h2><div class="score">✅ ${practiceResults.filter(r=>r===true).length}/${total}</div></div>
       <div class="progress"><div class="progress-fill" style="width:${((currentPracticeIndex)/total)*100}%"></div></div>
       <div class="practice-question">
         <strong>Задание ${currentPracticeIndex+1}/${total}</strong>
@@ -209,38 +345,41 @@ function renderPractice(container) {
     innerHtml += `<div class="options" id="practiceOptions">
       ${q.options.map(opt => `<div class="option ${userAnswer === opt ? 'selected' : ''}" data-choice="${opt}">${opt}</div>`).join('')}
     </div>`;
-  } else if (q.type === 'translate') {
-    innerHtml += `<input type="text" id="practiceInput" class="practice-input" placeholder="Ваш перевод..." value="${userAnswer||''}">`;
   } else {
-    innerHtml += `<input type="text" id="practiceInput" class="practice-input" placeholder="Вставьте слово..." value="${userAnswer||''}">`;
+    innerHtml += `<input type="text" id="practiceInput" class="practice-input" placeholder="Ваш ответ..." value="${userAnswer || ''}">`;
   }
 
   if (isAnswered) {
-    innerHtml += `<div class="result-badge ${resultClass}">${practiceResults[currentPracticeIndex] ? '✓ Верно!' : '✗ Ошибка. Правильно: '+q.correct}</div>`;
+    innerHtml += `<div class="result-badge ${resultClass}">${practiceResults[currentPracticeIndex] ? '✓ Верно!' : '✗ Ошибка. Правильно: ' + q.correct}</div>`;
   }
 
   innerHtml += `<div style="display:flex; gap:1rem; margin-top:1rem;">
     <button class="btn" id="checkAnswerBtn" style="flex:1;">${isAnswered ? 'Изменить' : 'Проверить'}</button>
     ${currentPracticeIndex + 1 < total ? '<button class="btn" id="nextPracticeBtn" style="flex:1;">Далее →</button>' : '<button class="btn" id="finishPracticeBtn" style="flex:1;">🏆 Завершить</button>'}
-  </div></div></div>`;
+  </div>
+  <div style="display:flex; gap:1rem; margin-top: 10px;">
+    <button class="btn-small" id="backToTheoryBtn" style="flex:1;">← Вернуться к теории</button>
+    <button class="btn-small" id="exitPracticeBtn" style="flex:1; background: #ff5e7c20; border-color:#ff5e7c; color:#ff9eae;">⚠️ Выйти из практики</button>
+  </div>
+  <button class="btn-small" id="resetAllBtn4" style="margin-top: 10px; background: #ff5e7c20; border-color:#ff5e7c; color:#ff9eae;">🔄 Сбросить весь прогресс</button>
+  </div></div>`;
 
   container.innerHTML = innerHtml;
 
   if (q.type !== 'choice') {
     const inp = document.getElementById('practiceInput');
     if (inp && !isAnswered) inp.focus();
+    if (inp) inp.addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('checkAnswerBtn')?.click(); });
   }
 
-  const checkBtn = document.getElementById('checkAnswerBtn');
-  checkBtn?.addEventListener('click', () => {
+  document.getElementById('checkAnswerBtn')?.addEventListener('click', () => {
     let answer = '';
     if (q.type === 'choice') {
       const selected = document.querySelector('#practiceOptions .option.selected');
       if (!selected) return;
       answer = selected.dataset.choice;
     } else {
-      const inputVal = document.getElementById('practiceInput')?.value.trim().toLowerCase() || '';
-      answer = inputVal;
+      answer = document.getElementById('practiceInput')?.value.trim().toLowerCase() || '';
     }
     const isCorrect = (answer.toLowerCase() === q.correct.toLowerCase());
     practiceAnswers[currentPracticeIndex] = answer;
@@ -248,14 +387,7 @@ function renderPractice(container) {
     render();
   });
 
-  if (!checkBtn && !isAnswered) {
-    // авто-обработка enter для инпутов
-    const inp = document.getElementById('practiceInput');
-    if (inp) inp.addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('checkAnswerBtn')?.click(); });
-  }
-
-  const nextBtn = document.getElementById('nextPracticeBtn');
-  nextBtn?.addEventListener('click', () => {
+  document.getElementById('nextPracticeBtn')?.addEventListener('click', () => {
     if (practiceAnswers[currentPracticeIndex] === null) return;
     if (currentPracticeIndex + 1 < total) {
       currentPracticeIndex++;
@@ -263,22 +395,44 @@ function renderPractice(container) {
     }
   });
 
-  const finishBtn = document.getElementById('finishPracticeBtn');
-  finishBtn?.addEventListener('click', () => {
-    let finalScore = practiceResults.filter(r=>r===true).length;
-    alert(`✨ Урок завершён! Твой результат: ${finalScore} / 20. Молодец! 💫`);
-    // можно начать заново или предложить сброс
-    if (confirm('Хочешь начать сначала? (с тестом уровня)')) {
-      resetApp();
+  document.getElementById('finishPracticeBtn')?.addEventListener('click', () => {
+    const finalScore = practiceResults.filter(r=>r===true).length;
+    alert(`✨ Урок завершён! Результат: ${finalScore} / 20. Отлично! 💫`);
+    if (confirm('Начать сначала? (с тестом уровня)')) {
+      resetProgress();
     } else {
-      currentScreen = 'lesson';
+      currentScreen = 'theory';
       render();
+    }
+  });
+
+  document.getElementById('backToTheoryBtn')?.addEventListener('click', () => {
+    currentScreen = 'theory';
+    render();
+  });
+  
+  // ⚠️ Кнопка выхода из практики с предупреждением
+  document.getElementById('exitPracticeBtn')?.addEventListener('click', () => {
+    const confirmed = confirm('⚠️ ВНИМАНИЕ! Если вы выйдете из практики, прогресс этого урока (все ответы) будет потерян. Вы уверены?');
+    if (confirmed) {
+      // Удаляем только прогресс текущего урока, но сохраняем уровень и язык
+      practiceAnswers = new Array(20).fill(null);
+      practiceResults = new Array(20).fill(false);
+      currentPracticeIndex = 0;
+      currentScreen = 'theory';
+      render();
+    }
+  });
+  
+  document.getElementById('resetAllBtn4')?.addEventListener('click', () => {
+    if (confirm('❓ Точно сбросить ВЕСЬ прогресс? Это удалит и уровень, и уроки.')) {
+      resetProgress();
     }
   });
 
   if (q.type === 'choice') {
     document.querySelectorAll('#practiceOptions .option').forEach(opt => {
-      opt.addEventListener('click', (e) => {
+      opt.addEventListener('click', () => {
         if (practiceAnswers[currentPracticeIndex] !== null) return;
         document.querySelectorAll('#practiceOptions .option').forEach(o => o.classList.remove('selected'));
         opt.classList.add('selected');
@@ -287,16 +441,12 @@ function renderPractice(container) {
   }
 }
 
-function resetApp() {
-  userLevel = null;
-  levelAnswers = [];
-  currentLesson = null;
-  practiceAnswers = new Array(20).fill(null);
-  practiceResults = new Array(20).fill(false);
-  currentPracticeIndex = 0;
-  currentScreen = 'levelTest';
+// ------------------- ЗАПУСК С ЗАГРУЗКОЙ ПРОГРЕССА -------------------
+document.addEventListener('DOMContentLoaded', () => {
+  const loaded = loadProgress();
+  if (loaded && currentLesson) {
+    // проверяем, что урок не сломался (можно добавить валидацию)
+    console.log('Прогресс загружен');
+  }
   render();
-}
-
-// инициализация
-render();
+});
