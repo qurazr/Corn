@@ -8,7 +8,6 @@ body {
   background: #0a0a0f;
   font-family: 'Inter', sans-serif;
   color: #eef5ff;
-  line-height: 1.5;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -16,215 +15,12 @@ body {
   padding: 1rem;
 }
 
-.app-container {
+#app {
   max-width: 800px;
   width: 100%;
-  margin: 0 auto;
 }
 
-/* ---------- КАРТОЧКИ ---------- */
-.card {
-  background: rgba(15, 20, 30, 0.75);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(10, 255, 157, 0.3);
-  border-radius: 28px;
-  padding: 1.8rem;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.6), 0 0 15px rgba(10, 255, 157, 0.2);
-  transition: all 0.2s ease;
-}
-
-h2 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #ffffff, #a0f0ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.sub {
-  color: #9aaebf;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-}
-
-/* ---------- ТЕСТ ---------- */
-.question-box, .option-btn {
-  background: #11161f;
-  border-radius: 24px;
-  padding: 1rem 1.2rem;
-  margin-bottom: 1rem;
-  border: 1px solid #2a3a4a;
-  transition: 0.2s;
-}
-
-.question-text {
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-  font-size: 1.1rem;
-}
-
-.options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.option {
-  background: #0f141c;
-  padding: 12px 18px;
-  border-radius: 40px;
-  cursor: pointer;
-  border: 1px solid #2c3a4a;
-  transition: all 0.2s;
-  font-weight: 400;
-}
-
-.option:hover {
-  border-color: #0aff9d;
-  background: #1a2a2f;
-  box-shadow: 0 0 6px #0aff9d;
-}
-
-.selected {
-  background: #0aff9d20;
-  border-color: #0aff9d;
-  color: #ccffdd;
-  box-shadow: 0 0 10px #0aff9d40;
-}
-
-/* ---------- КНОПКИ ---------- */
-.btn {
-  background: linear-gradient(95deg, #0aff9d, #00c3ff);
-  border: none;
-  padding: 12px 28px;
-  border-radius: 60px;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #0a0f1a;
-  cursor: pointer;
-  transition: 0.2s;
-  margin-top: 1rem;
-  width: 100%;
-  letter-spacing: 0.3px;
-}
-
-.btn-small {
-  background: linear-gradient(95deg, #0aff9d, #00c3ff);
-  border: none;
-  padding: 8px 16px;
-  border-radius: 60px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #0a0f1a;
-  cursor: pointer;
-  transition: 0.2s;
-  margin-top: 0.5rem;
-  width: auto;
-}
-
-.btn:hover, .btn-small:hover {
-  transform: scale(0.98);
-  box-shadow: 0 0 18px #0aff9d;
-}
-
-/* ---------- ВЫБОР ЯЗЫКА ---------- */
-.lang-select {
-  background: #0f141c;
-  border: 1px solid #2c3a4a;
-  border-radius: 60px;
-  padding: 12px 20px;
-  width: 100%;
-  color: white;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* ---------- ПРОГРЕСС ---------- */
-.progress {
-  margin: 20px 0 10px;
-  height: 6px;
-  background: #1e2a32;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  width: 0%;
-  height: 100%;
-  background: linear-gradient(90deg, #0aff9d, #00c3ff);
-  box-shadow: 0 0 5px #0aff9d;
-}
-
-/* ---------- СЛОВАРЬ ---------- */
-.word-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 20px 0;
-}
-
-.word-item {
-  background: #0b1018;
-  padding: 12px 18px;
-  border-radius: 20px;
-  display: flex;
-  justify-content: space-between;
-  border-left: 4px solid #0aff9d;
-}
-
-/* ---------- ПРАКТИКА ---------- */
-.practice-question {
-  background: #11161f;
-  border-radius: 24px;
-  padding: 1.2rem;
-  margin-bottom: 1.2rem;
-}
-
-.practice-input {
-  background: #0a0f16;
-  border: 1px solid #2a3a4a;
-  border-radius: 40px;
-  padding: 12px 18px;
-  width: 100%;
-  color: white;
-  margin: 12px 0;
-  font-size: 1rem;
-}
-
-.result-badge {
-  margin-top: 12px;
-  font-size: 0.85rem;
-}
-
-.correct {
-  color: #0aff9d;
-}
-
-.wrong {
-  color: #ff5e7c;
-}
-
-.flex-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.score {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #0aff9d;
-}
-
-.button-group {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-/* ---------- СПЛЕШ-ЭКРАН ---------- */
+/* СПЛЕШ-ЭКРАН */
 .splash-screen {
   position: fixed;
   top: 0;
@@ -251,8 +47,6 @@ h2 {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-shadow: 0 0 40px rgba(125, 249, 255, 0.6);
-  letter-spacing: -2px;
 }
 
 .splash-glow {
@@ -261,27 +55,16 @@ h2 {
   margin: 25px auto 0;
   background: linear-gradient(90deg, #0aff9d, #00c3ff);
   border-radius: 4px;
-  box-shadow: 0 0 25px #0aff9d;
   animation: widthPulse 1s ease-in-out infinite;
 }
 
 .splash-timer {
   font-size: 2.5rem;
-  font-weight: 700;
   margin-top: 30px;
   color: #0aff9d;
-  text-shadow: 0 0 20px #0aff9d;
   font-family: monospace;
 }
 
-.splash-text {
-  font-size: 0.85rem;
-  color: #6a7c8f;
-  margin-top: 10px;
-  letter-spacing: 2px;
-}
-
-/* ---------- АНИМАЦИИ ---------- */
 @keyframes pulse {
   0% { transform: scale(1); opacity: 0.8; }
   50% { transform: scale(1.03); opacity: 1; }
@@ -294,35 +77,114 @@ h2 {
   100% { width: 80px; opacity: 0.6; }
 }
 
-/* ---------- АДАПТИВ ---------- */
-@media (max-width: 600px) {
-  .card {
-    padding: 1.2rem;
-  }
-  
-  h2 {
-    font-size: 1.4rem;
-  }
-  
-  .splash-logo {
-    font-size: 3.5rem;
-  }
-  
-  .splash-timer {
-    font-size: 2rem;
-  }
-  
-  .btn, .btn-small {
-    width: 100%;
-  }
-  
-  .button-group {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .word-item {
-    flex-direction: column;
-    gap: 8px;
-  }
+/* КАРТОЧКИ */
+.card {
+  background: rgba(15, 20, 30, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(10, 255, 157, 0.3);
+  border-radius: 28px;
+  padding: 1.8rem;
+  box-shadow: 0 0 15px rgba(10, 255, 157, 0.2);
 }
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ffffff, #a0f0ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sub {
+  color: #9aaebf;
+  margin-bottom: 1.5rem;
+}
+
+.option {
+  background: #0f141c;
+  padding: 12px 18px;
+  border-radius: 40px;
+  cursor: pointer;
+  border: 1px solid #2c3a4a;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.option:hover {
+  border-color: #0aff9d;
+  box-shadow: 0 0 6px #0aff9d;
+}
+
+.selected {
+  background: #0aff9d20;
+  border-color: #0aff9d;
+}
+
+.btn {
+  background: linear-gradient(95deg, #0aff9d, #00c3ff);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 60px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.btn:hover {
+  transform: scale(0.98);
+  box-shadow: 0 0 18px #0aff9d;
+}
+
+.progress {
+  margin: 20px 0;
+  height: 6px;
+  background: #1e2a32;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #0aff9d, #00c3ff);
+}
+
+.word-list {
+  margin: 20px 0;
+}
+
+.word-item {
+  background: #0b1018;
+  padding: 12px 18px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  border-left: 4px solid #0aff9d;
+}
+
+.practice-question {
+  background: #11161f;
+  border-radius: 24px;
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.practice-input {
+  background: #0a0f16;
+  border: 1px solid #2a3a4a;
+  border-radius: 40px;
+  padding: 12px 18px;
+  width: 100%;
+  color: white;
+  margin: 12px 0;
+}
+
+.correct { color: #0aff9d; }
+.wrong { color: #ff5e7c; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.score { font-size: 1.3rem; font-weight: 700; color: #0aff9d; }
+.button-group { display: flex; gap: 1rem; margin-top: 1rem; }
+.btn-small { background: #0aff9d; border: none; padding: 8px 16px; border-radius: 60px; cursor: pointer; }
