@@ -37,3 +37,34 @@
   "B1": [],
   "B2": []
 }
+    {
+      "id": "A0_L2",
+      "title": "Урок 2: Местоимения",
+      "theory": [
+        "📘 <b>Личные местоимения</b>\n\nЗаменяют имена и предметы:\n• <b>I</b> (я)\n• <b>You</b> (ты, вы)\n• <b>He</b> (он)\n• <b>She</b> (она)\n• <b>It</b> (оно)\n• <b>We</b> (мы)\n• <b>They</b> (они)",
+        "📝 <b>Притяжательные местоимения</b>\n\nПоказывают принадлежность:\n• <b>My</b> book (моя книга)\n• <b>Your</b> car (твоя машина)\n• <b>His</b> dog (его собака)\n• <b>Her</b> cat (её кошка)\n• <b>Our</b> house (наш дом)\n• <b>Their</b> friends (их друзья)",
+        "💡 <b>Запомни!</b>\n\nI am happy. (Я счастлив)\n<b>My</b> name is... (Моё имя...)\n\nHe is here. (Он здесь)\nThis is <b>his</b> bag. (Это его сумка)"
+      ],
+      "questions": [
+        {"q": "___ am a teacher.", "a": ["I", "Me", "My", "Mine"], "c": 0},
+        {"q": "This is ___ book.", "a": ["I", "me", "my", "mine"], "c": 2},
+        {"q": "___ is my friend.", "a": ["He", "Him", "His", "Hers"], "c": 0},
+        {"q": "I like ___ car.", "a": ["you", "your", "yours", "ours"], "c": 1},
+        {"q": "___ are students.", "a": ["We", "Us", "Our", "Ours"], "c": 0},
+        {"q": "That is ___ cat.", "a": ["she", "her", "hers", "herself"], "c": 1},
+        {"q": "___ name is John.", "a": ["He", "Him", "His", "Hers"], "c": 2},
+        {"q": "They are ___ friends.", "a": ["we", "us", "our", "ours"], "c": 2},
+        {"q": "___ is a doctor.", "a": ["She", "Her", "Hers", "Herself"], "c": 0},
+        {"q": "I know ___.", "a": ["they", "them", "their", "theirs"], "c": 1},
+        {"q": "___ house is big.", "a": ["They", "Them", "Their", "Theirs"], "c": 2},
+        {"q": "Can you help ___?", "a": ["I", "me", "my", "mine"], "c": 1},
+        {"q": "___ parents are nice.", "a": ["We", "Us", "Our", "Ours"], "c": 2},
+        {"q": "This is not ___ bag.", "a": ["I", "me", "my", "mine"], "c": 2},
+        {"q": "___ love music.", "a": ["We", "Us", "Our", "Ours"], "c": 0},
+        {"q": "Is this ___ pen?", "a": ["you", "your", "yours", "ours"], "c": 1},
+        {"q": "___ brother is tall.", "a": ["He", "Him", "His", "Hers"], "c": 2},
+        {"q": "I see ___.", "a": ["she", "her", "hers", "herself"], "c": 1},
+        {"q": "___ are happy.", "a": ["They", "Them", "Their", "Theirs"], "c": 0},
+        {"q": "That is ___ idea.", "a": ["we", "us", "our", "ours"], "c": 2}
+      ]
+    }
