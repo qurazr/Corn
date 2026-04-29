@@ -425,32 +425,22 @@ function renderPractice(container) {
   }
 }
 
-// ------------------- ЗАПУСК С ГАРАНТИРОВАННЫМ СПЛЕШ-ЭКРАНОМ -------------------
-// Ждём полной загрузки HTML
+// ------------------- ЗАПУСК С УДАЛЕНИЕМ СПЛЕША -------------------
 window.addEventListener('load', function() {
-  // Создаём сплеш
-  const splash = document.createElement('div');
-  splash.id = 'splashScreen';
-  splash.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0f;display:flex;justify-content:center;align-items:center;z-index:9999;transition:opacity 0.5s;';
-  splash.innerHTML = `
-    <div style="text-align:center;">
-      <div style="font-size:4rem;font-weight:800;background:linear-gradient(135deg,#bfffc7,#7df9ff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px #7df9ff;">Aevi</div>
-      <div style="width:80px;height:4px;margin:20px auto 0;background:linear-gradient(90deg,#0aff9d,#00c3ff);border-radius:4px;box-shadow:0 0 20px #0aff9d;"></div>
-    </div>
-  `;
-  document.body.appendChild(splash);
-  
   // Загружаем прогресс
   loadProgress();
   
   // Рендерим приложение
   render();
   
-  // Убираем сплеш через 1.5 секунды
-  setTimeout(function() {
-    splash.style.opacity = '0';
+  // НАХОДИМ И УДАЛЯЕМ СПЛЕШ
+  const splash = document.getElementById('splash');
+  if (splash) {
     setTimeout(function() {
-      if (splash.parentNode) splash.remove();
-    }, 500);
-  }, 1500);
+      splash.style.opacity = '0';
+      setTimeout(function() {
+        if (splash.parentNode) splash.remove();
+      }, 500);
+    }, 1500);
+  }
 });
