@@ -425,22 +425,43 @@ function renderPractice(container) {
   }
 }
 
-// ------------------- ЗАПУСК С УДАЛЕНИЕМ СПЛЕША -------------------
+// ------------------- ЗАПУСК С ЗАСТАВКОЙ НА 5 СЕКУНД -------------------
+let timerInterval;
+let secondsLeft = 5;
+
+function startSplashTimer() {
+  const timerElement = document.getElementById('splashTimer');
+  if (!timerElement) return;
+  
+  timerInterval = setInterval(() => {
+    secondsLeft--;
+    if (timerElement) {
+      timerElement.textContent = secondsLeft;
+    }
+    
+    if (secondsLeft <= 0) {
+      clearInterval(timerInterval);
+      // Плавно скрываем заставку
+      const splash = document.getElementById('splash');
+      const mainApp = document.getElementById('mainApp');
+      
+      if (splash) {
+        splash.style.opacity = '0';
+        setTimeout(() => {
+          splash.style.display = 'none';
+          if (mainApp) {
+            mainApp.style.display = 'block';
+          }
+          // Загружаем прогресс и запускаем приложение
+          loadProgress();
+          render();
+        }, 1000);
+      }
+    }
+  }, 1000);
+}
+
+// Ждём загрузки страницы и запускаем таймер
 window.addEventListener('load', function() {
-  // Загружаем прогресс
-  loadProgress();
-  
-  // Рендерим приложение
-  render();
-  
-  // НАХОДИМ И УДАЛЯЕМ СПЛЕШ
-  const splash = document.getElementById('splash');
-  if (splash) {
-    setTimeout(function() {
-      splash.style.opacity = '0';
-      setTimeout(function() {
-        if (splash.parentNode) splash.remove();
-      }, 500);
-    }, 1500);
-  }
+  startSplashTimer();
 });
