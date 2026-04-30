@@ -26,7 +26,6 @@
             gap: 24px;
         }
 
-        /* Левая панель с темами */
         .topics-panel {
             flex: 2;
             min-width: 260px;
@@ -119,7 +118,6 @@
             color: #7df9ff;
         }
 
-        /* Правая панель (теория/практика/результаты) */
         .content-panel {
             flex: 5;
             min-width: 300px;
@@ -156,12 +154,6 @@
             background: transparent;
             border: 1px solid #0aff9d;
             color: #0aff9d;
-        }
-
-        .btn-danger {
-            background: #ff5e7c;
-            background: linear-gradient(95deg, #ff5e7c, #ff9eae);
-            color: #1a0f12;
         }
 
         .ai-explanation {
@@ -270,45 +262,45 @@
 <div class="app-container" id="app"></div>
 
 <script>
-    // ==================== ПОЛНАЯ БАЗА ТЕМ A1-C2 ====================
+    // ==================== ПОЛНАЯ БАЗА ТЕМ A1-C2 (РУССКИЙ ЯЗЫК) ====================
     const KNOWLEDGE_BASE = {
         English: {
             A1: [
-                { id: "a1_1", title: "Greetings & Introductions", grammarFocus: "to be", theory: "<strong>Greetings and the verb TO BE</strong><br><br>I am Alex. / You are a student.<br><strong>Negative:</strong> I am not (I'm not) tired.<br><strong>Question:</strong> Are you ready?" },
-                { id: "a1_2", title: "Verb TO BE", grammarFocus: "to be", theory: "<strong>Conjugation of TO BE</strong><br><br>I am, He/She/It is, You/We/They are.<br>+ I am happy. - I am not sad. ? Are you OK?" },
-                { id: "a1_3", title: "Plural nouns", grammarFocus: "plural", theory: "<strong>Plural rules</strong><br><br>cat → cats, bus → buses, lady → ladies.<br>Exceptions: man → men, child → children, foot → feet." },
-                { id: "a1_4", title: "Articles A / AN / THE", grammarFocus: "articles", theory: "<strong>Articles</strong><br><br>a + consonant sound (a dog), an + vowel sound (an apple).<br>THE — specific: the sun, the car we saw." },
-                { id: "a1_5", title: "Present Simple", grammarFocus: "present simple", theory: "<strong>Present Simple</strong><br><br>I work / He works.<br>- I don't work / He doesn't work.<br>? Do you work? / Does she work?" }
+                { id: "a1_1", title: "Приветствия и знакомство", grammarFocus: "to be", theory: "<strong>Приветствия и глагол TO BE</strong><br><br>I am Alex. / You are a student. (Я Алекс. / Ты студент.)<br><strong>Отрицание:</strong> I am not (I'm not) tired. (Я не устал.)<br><strong>Вопрос:</strong> Are you ready? (Ты готов?)" },
+                { id: "a1_2", title: "Глагол TO BE", grammarFocus: "to be", theory: "<strong>Спряжение глагола TO BE</strong><br><br>I am, He/She/It is, You/We/They are<br>Я есть, Он/Она/Оно есть, Ты/Мы/Они есть<br>+ I am happy. (Я счастлив.)<br>- I am not sad. (Я не грустный.)<br>? Are you OK? (Ты в порядке?)" },
+                { id: "a1_3", title: "Множественное число", grammarFocus: "plural", theory: "<strong>Множественное число существительных</strong><br><br>cat → cats (кот → коты)<br>bus → buses (автобус → автобусы)<br>lady → ladies (леди → леди)<br><strong>Исключения:</strong> man → men, child → children, foot → feet" },
+                { id: "a1_4", title: "Артикли A / AN / THE", grammarFocus: "articles", theory: "<strong>Артикли в английском языке</strong><br><br>a + согласный звук (a dog — собака)<br>an + гласный звук (an apple — яблоко)<br>THE — когда речь о конкретном предмете: the sun (солнце), the car we saw (машина, которую мы видели)" },
+                { id: "a1_5", title: "Present Simple", grammarFocus: "present simple", theory: "<strong>Настоящее простое время (Present Simple)</strong><br><br>I work / He works (Я работаю / Он работает)<br>- I don't work / He doesn't work (Я не работаю / Он не работает)<br>? Do you work? / Does she work? (Ты работаешь? / Она работает?)" }
             ],
             A2: [
-                { id: "a2_1", title: "Past Simple (regular verbs)", grammarFocus: "past simple", theory: "<strong>Past Simple (regular)</strong><br><br>+ed: I played, she watched.<br>- didn't play. ? Did you play?" },
-                { id: "a2_2", title: "Irregular verbs (part 1)", grammarFocus: "irregular verbs", theory: "<strong>Irregular verbs</strong><br><br>go→went, see→saw, buy→bought, think→thought, eat→ate" },
-                { id: "a2_3", title: "Future Simple (will)", grammarFocus: "future", theory: "<strong>Future Simple</strong><br><br>I will call you tomorrow.<br>- won't. ? Will you come?" },
-                { id: "a2_4", title: "To be going to", grammarFocus: "future plans", theory: "<strong>To be going to</strong><br><br>I am going to study Spanish. (planned action)" }
+                { id: "a2_1", title: "Past Simple (правильные глаголы)", grammarFocus: "past simple", theory: "<strong>Прошедшее простое время (Past Simple) — правильные глаголы</strong><br><br>+ed: I played, she watched (Я играл, она смотрела)<br>- didn't play (не играл)<br>? Did you play? (Ты играл?)" },
+                { id: "a2_2", title: "Неправильные глаголы (часть 1)", grammarFocus: "irregular verbs", theory: "<strong>Неправильные глаголы — нужно запомнить</strong><br><br>go → went (идти → пошёл)<br>see → saw (видеть → увидел)<br>buy → bought (покупать → купил)<br>think → thought (думать → подумал)<br>eat → ate (есть → съел)" },
+                { id: "a2_3", title: "Future Simple (will)", grammarFocus: "future", theory: "<strong>Будущее простое время (Future Simple)</strong><br><br>I will call you tomorrow. (Я позвоню тебе завтра.)<br>- won't (не буду)<br>? Will you come? (Ты придёшь?)" },
+                { id: "a2_4", title: "Конструкция to be going to", grammarFocus: "future plans", theory: "<strong>Конструкция to be going to (собираться сделать)</strong><br><br>I am going to study Spanish. (Я собираюсь учить испанский.)<br>Выражает запланированное действие." }
             ],
             B1: [
-                { id: "b1_1", title: "Present Perfect", grammarFocus: "present perfect", theory: "<strong>Present Perfect</strong><br><br>I have visited London. / She has never tried sushi.<br>Markers: ever, never, already, yet, since, for." },
-                { id: "b1_2", title: "Present Perfect Continuous", grammarFocus: "present perfect continuous", theory: "<strong>Present Perfect Continuous</strong><br><br>I have been waiting for 2 hours. (focus on duration)" },
-                { id: "b1_3", title: "Conditionals (type 0,1)", grammarFocus: "conditionals", theory: "<strong>Conditionals</strong><br><br>Zero: If you heat ice, it melts.<br>First: If it rains, I will stay home." },
-                { id: "b1_4", title: "Modal Verbs (can, could, may)", grammarFocus: "modals", theory: "<strong>Modal Verbs</strong><br><br>can (ability), could (polite request), may (permission)" }
+                { id: "b1_1", title: "Present Perfect", grammarFocus: "present perfect", theory: "<strong>Настоящее совершённое время (Present Perfect)</strong><br><br>I have visited London. (Я был в Лондоне.)<br>She has never tried sushi. (Она никогда не пробовала суши.)<br>Слова-маркеры: ever (когда-либо), never (никогда), already (уже), yet (ещё), since (с), for (в течение)" },
+                { id: "b1_2", title: "Present Perfect Continuous", grammarFocus: "present perfect continuous", theory: "<strong>Настоящее совершённое длительное время</strong><br><br>I have been waiting for 2 hours. (Я жду уже 2 часа.)<br>Акцент на длительности действия." },
+                { id: "b1_3", title: "Условные предложения (0,1 тип)", grammarFocus: "conditionals", theory: "<strong>Условные предложения</strong><br><br>0 тип (факты): If you heat ice, it melts. (Если нагреть лёд, он тает.)<br>1 тип (реальное условие): If it rains, I will stay home. (Если пойдёт дождь, я останусь дома.)" },
+                { id: "b1_4", title: "Модальные глаголы (can, could, may)", grammarFocus: "modals", theory: "<strong>Модальные глаголы</strong><br><br>can — способность (I can swim — Я умею плавать)<br>could — вежливая просьба (Could you help me? — Не могли бы вы помочь?)<br>may — разрешение (May I come in? — Можно войти?)" }
             ],
             B2: [
-                { id: "b2_1", title: "Passive Voice", grammarFocus: "passive", theory: "<strong>Passive Voice</strong><br><br>The book was written by Tolstoy.<br>Formula: to be + V3 (past participle)." },
-                { id: "b2_2", title: "Conditionals (type 2,3)", grammarFocus: "conditionals", theory: "<strong>Conditionals type 2 and 3</strong><br><br>Second: If I were rich, I would travel.<br>Third: If you had called, I would have helped." },
-                { id: "b2_3", title: "Reported Speech", grammarFocus: "reported speech", theory: "<strong>Reported Speech</strong><br><br>She said that she was tired.<br>Tense shift: present → past." },
-                { id: "b2_4", title: "Relative Clauses", grammarFocus: "clauses", theory: "<strong>Relative Clauses</strong><br><br>The man who called you is my brother.<br>The book which I bought is interesting." }
+                { id: "b2_1", title: "Пассивный залог", grammarFocus: "passive", theory: "<strong>Пассивный залог (Passive Voice)</strong><br><br>The book was written by Tolstoy. (Книга была написана Толстым.)<br>Формула: to be + V3 (причастие прошедшего времени)." },
+                { id: "b2_2", title: "Условные предложения (2,3 тип)", grammarFocus: "conditionals", theory: "<strong>Условные предложения 2 и 3 типа</strong><br><br>2 тип (нереальное настоящее): If I were rich, I would travel. (Если бы я был богат, я бы путешествовал.)<br>3 тип (нереальное прошлое): If you had called, I would have helped. (Если бы ты позвонил, я бы помог.)" },
+                { id: "b2_3", title: "Косвенная речь", grammarFocus: "reported speech", theory: "<strong>Косвенная речь (Reported Speech)</strong><br><br>She said that she was tired. (Она сказала, что устала.)<br>Сдвиг времён: настоящее → прошедшее." },
+                { id: "b2_4", title: "Относительные придаточные", grammarFocus: "clauses", theory: "<strong>Относительные придаточные (Relative Clauses)</strong><br><br>The man who called you is my brother. (Человек, который тебе звонил, — мой брат.)<br>The book which I bought is interesting. (Книга, которую я купил, интересная.)" }
             ],
             C1: [
-                { id: "c1_1", title: "Inversion", grammarFocus: "inversion", theory: "<strong>Inversion</strong><br><br>Never have I seen such beauty.<br>Not only did she arrive late, but she also forgot her keys." },
-                { id: "c1_2", title: "Subjunctive", grammarFocus: "subjunctive", theory: "<strong>Subjunctive</strong><br><br>I suggest that he go to the doctor.<br>It's essential that she be informed." },
-                { id: "c1_3", title: "Mixed Conditionals", grammarFocus: "mixed conditionals", theory: "<strong>Mixed Conditionals</strong><br><br>If he had studied, he would be an expert now." },
-                { id: "c1_4", title: "Ellipsis and Substitution", grammarFocus: "ellipsis", theory: "<strong>Ellipsis and Substitution</strong><br><br>'Can you help?' 'I can.' (ellipsis)" }
+                { id: "c1_1", title: "Инверсия", grammarFocus: "inversion", theory: "<strong>Инверсия (Inversion)</strong><br><br>Never have I seen such beauty. (Никогда я не видел такой красоты.)<br>Not only did she arrive late, but she also forgot her keys. (Она не только опоздала, но и забыла ключи.)" },
+                { id: "c1_2", title: "Сослагательное наклонение", grammarFocus: "subjunctive", theory: "<strong>Сослагательное наклонение (Subjunctive)</strong><br><br>I suggest that he go to the doctor. (Я предлагаю, чтобы он пошёл к врачу.)<br>It's essential that she be informed. (Важно, чтобы её проинформировали.)" },
+                { id: "c1_3", title: "Смешанные условные", grammarFocus: "mixed conditionals", theory: "<strong>Смешанные условные предложения</strong><br><br>If he had studied, he would be an expert now. (Если бы он учился, он был бы сейчас экспертом.)<br>Смешивает время в условии и результате." },
+                { id: "c1_4", title: "Эллипсис", grammarFocus: "ellipsis", theory: "<strong>Эллипсис (Ellipsis)</strong><br><br>'Can you help?' 'I can.' (Можешь помочь? Могу.)<br>Пропуск слов, понятных из контекста." }
             ],
             C2: [
-                { id: "c2_1", title: "Idioms & Fixed Expressions", grammarFocus: "idioms", theory: "<strong>Idioms</strong><br><br>'Spill the beans' — reveal a secret.<br>'Hit the nail on the head' — describe exactly." },
-                { id: "c2_2", title: "Advanced Inversion & Fronting", grammarFocus: "advanced inversion", theory: "<strong>Advanced Inversion</strong><br><br>'Had I known, I would have acted.'<br>'Such was his anger that he left.'" },
-                { id: "c2_3", title: "Nominalization", grammarFocus: "nominalization", theory: "<strong>Nominalization</strong><br><br>'The discovery of the cure' instead of 'They discovered the cure'." },
-                { id: "c2_4", title: "Rhetorical Devices", grammarFocus: "rhetoric", theory: "<strong>Rhetorical Devices</strong><br><br>Anaphora: 'We shall fight on the beaches, we shall fight...'" }
+                { id: "c2_1", title: "Идиомы", grammarFocus: "idioms", theory: "<strong>Идиомы</strong><br><br>'Spill the beans' — выдать секрет.<br>'Hit the nail on the head' — точно описать проблему." },
+                { id: "c2_2", title: "Продвинутая инверсия", grammarFocus: "advanced inversion", theory: "<strong>Продвинутая инверсия</strong><br><br>'Had I known, I would have acted.' (Если бы я знал, я бы действовал.)<br>'Such was his anger that he left.' (Так велик был его гнев, что он ушёл.)" },
+                { id: "c2_3", title: "Номинализация", grammarFocus: "nominalization", theory: "<strong>Номинализация</strong><br><br>'The discovery of the cure' вместо 'They discovered the cure'<br>Делает текст более формальным." },
+                { id: "c2_4", title: "Риторические приёмы", grammarFocus: "rhetoric", theory: "<strong>Риторические приёмы</strong><br><br>Анафора: 'We shall fight on the beaches, we shall fight...' (Мы будем сражаться на пляжах, мы будем сражаться...)" }
             ]
         }
     };
@@ -321,31 +313,43 @@
             const num = current.length + 1;
             current.push({
                 id: `${lvl.toLowerCase()}_extra_${num}`,
-                title: `${lvl} — Theme ${num}: Extended Practice`,
+                title: `${lvl} — Тема ${num}: дополнительная практика`,
                 grammarFocus: "general",
-                theory: `<strong>Extended lesson ${lvl}</strong><br><br>Studying advanced constructions of level ${lvl}.<br>Example: "They have been mastering these skills."<br>Practice through exercises.`
+                theory: `<strong>Расширенный урок уровня ${lvl}</strong><br><br>Изучаем продвинутые конструкции уровня ${lvl}.<br>Пример: "They have been mastering these skills."<br>Практика через упражнения.`
             });
         }
     }
 
-    // Генерация 20 заданий для темы
+    // Генерация 20 заданий для темы (русские объяснения)
     function generatePracticeForTopic(topic, level, lang = "English") {
         let tasks = [];
         const grammar = topic.grammarFocus || "general";
         for (let i = 0; i < 20; i++) {
             if (grammar === "to be" || grammar === "present simple") {
-                tasks.push({ type: "input", question: "Put the verb in the correct form: She ___ (be) a doctor.", correct: "is", aiExplanation: "She + is (3rd person singular)" });
-                tasks.push({ type: "choice", question: "Choose the correct option: They ___ playing football now.", options: ["is", "am", "are", "be"], correct: "are", aiExplanation: "They are — plural form." });
+                tasks.push({ type: "input", question: "Поставьте глагол в правильную форму: She ___ (be) a doctor.", correct: "is", aiExplanation: "She + is (3-е лицо единственного числа)" });
+                tasks.push({ type: "choice", question: "Выберите правильный вариант: They ___ playing football now.", options: ["is", "am", "are", "be"], correct: "are", aiExplanation: "They are — форма для множественного числа." });
+                tasks.push({ type: "input", question: "I ___ (like) coffee.", correct: "like", aiExplanation: "I + like (без окончания -s)" });
             } else if (grammar === "past simple") {
-                tasks.push({ type: "input", question: "Put in Past Simple: Yesterday I ___ (go) to the cinema.", correct: "went", aiExplanation: "Irregular verb: go → went." });
+                tasks.push({ type: "input", question: "Поставьте в Past Simple: Yesterday I ___ (go) to the cinema.", correct: "went", aiExplanation: "Неправильный глагол: go → went (идти → пошёл)" });
+                tasks.push({ type: "input", question: "She ___ (watch) TV last night.", correct: "watched", aiExplanation: "Правильный глагол: watch → watched (смотрела)" });
             } else if (grammar === "present perfect") {
-                tasks.push({ type: "input", question: "I ___ (never/see) such a beautiful sunset.", correct: "have never seen", aiExplanation: "Present Perfect: have + V3" });
+                tasks.push({ type: "input", question: "I ___ (never/see) such a beautiful sunset.", correct: "have never seen", aiExplanation: "Present Perfect: have + V3 (никогда не видел)" });
+                tasks.push({ type: "input", question: "She ___ (already/finish) her homework.", correct: "has already finished", aiExplanation: "Present Perfect: has + V3 (уже закончила)" });
             } else if (grammar === "passive") {
-                tasks.push({ type: "input", question: "The cake ___ (make) by my grandmother.", correct: "was made", aiExplanation: "Passive voice: was + V3" });
+                tasks.push({ type: "input", question: "The cake ___ (make) by my grandmother.", correct: "was made", aiExplanation: "Пассивный залог: was + V3 (был сделан)" });
+            } else if (grammar === "future") {
+                tasks.push({ type: "input", question: "I ___ (call) you tomorrow.", correct: "will call", aiExplanation: "Future Simple: will + глагол (позвоню)" });
+            } else if (grammar === "modals") {
+                tasks.push({ type: "input", question: "She ___ (can) swim very well.", correct: "can", aiExplanation: "Модальный глагол can (умеет)" });
             } else {
-                tasks.push({ type: "translate", question: "Translate the word 'success'", correct: "success", aiExplanation: "success — important vocabulary" });
-                tasks.push({ type: "input", question: "She advised that he ___ (go) there.", correct: "go", aiExplanation: "Subjunctive: advise that + go" });
+                tasks.push({ type: "translate", question: "Переведите слово 'success'", correct: "success", aiExplanation: "success — успех" });
+                tasks.push({ type: "input", question: "She advised that he ___ (go) there.", correct: "go", aiExplanation: "Сослагательное наклонение: advise that + go" });
             }
+        }
+        // Перемешиваем и берем 20
+        for (let i = tasks.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [tasks[i], tasks[j]] = [tasks[j], tasks[i]];
         }
         return tasks.slice(0, 20);
     }
@@ -356,7 +360,7 @@
     let completedTopics = JSON.parse(localStorage.getItem("aevi_completed")) || [];
     let mistakeHistory = JSON.parse(localStorage.getItem("aevi_mistakes")) || [];
     let currentTopic = null;
-    let currentMode = "topics"; // topics, theory, practice, results
+    let currentMode = "topics";
     let currentPracticeTasks = [];
     let currentTaskIdx = 0;
     let practiceAnswers = [];
@@ -389,18 +393,18 @@
         saveAll();
         const recentMistakes = mistakeHistory.slice(0, 10).filter(m => m.grammarFocus === grammarFocus).length;
         const advice = recentMistakes < 3 
-            ? "You are progressing, I will ask this topic less often." 
-            : "This mistake repeats, the topic will appear more often.";
-        return { explanation: `AI analysis: Correct answer — "${correct}". You wrote "${userAnswer}". ${grammarFocus ? `Pay attention to grammar: ${grammarFocus}.` : ""} ${advice}` };
+            ? "Вы прогрессируете, я буду реже спрашивать эту тему." 
+            : "Ошибка повторяется, эта тема будет встречаться чаще.";
+        return { explanation: `Анализ ИИ: Правильный ответ — "${correct}". Вы написали "${userAnswer}". ${grammarFocus ? `Обратите внимание на грамматику: ${grammarFocus}.` : ""} ${advice}` };
     }
 
     function startInfinitePractice() {
         let taskPool = [];
         const grammarSet = new Set(mistakeHistory.slice(0, 30).map(m => m.grammarFocus || "general"));
         Array.from(grammarSet).forEach(g => {
-            for (let i=0;i<3;i++) taskPool.push({ type: "translate", question: `Practice grammar [${g}]: translate "confidence"`, correct: "confidence", aiExplanation: "Repeating mistakes", grammarFocus: g });
+            for (let i=0;i<3;i++) taskPool.push({ type: "translate", question: `Практика грамматики [${g}]: переведите "уверенность"`, correct: "confidence", aiExplanation: "Повторение ошибок", grammarFocus: g });
         });
-        if (taskPool.length<10) taskPool.push({ type: "input", question: "She ___ (to be) happy.", correct: "is", aiExplanation: "", grammarFocus: "to be" });
+        if (taskPool.length<10) taskPool.push({ type: "input", question: "She ___ (to be) happy.", correct: "is", aiExplanation: "She + is", grammarFocus: "to be" });
         currentPracticeTasks = taskPool.slice(0,20);
         currentTaskIdx = 0;
         practiceAnswers = new Array(currentPracticeTasks.length).fill(null);
@@ -462,7 +466,6 @@
         const container = document.getElementById('app');
         if (!container) return;
 
-        // Левая панель (всегда видна)
         const topicListHtml = topics.map((t, idx) => {
             const isCompleted = completedTopics.includes(t.id);
             const isActive = currentTopic && currentTopic.id === t.id;
@@ -470,23 +473,22 @@
                 <div class="topic-item ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}" data-id="${t.id}">
                     <div class="topic-status">${isCompleted ? '✓' : idx+1}</div>
                     <div class="topic-name">${t.title}</div>
-                    <div class="topic-badge">${t.grammarFocus || 'vocab'}</div>
+                    <div class="topic-badge">${t.grammarFocus === 'to be' ? 'глагол to be' : t.grammarFocus === 'present simple' ? 'Present Simple' : t.grammarFocus === 'plural' ? 'мн.число' : t.grammarFocus === 'articles' ? 'артикли' : t.grammarFocus || 'лексика'}</div>
                 </div>
             `;
         }).join('');
         
         const completedCount = completedTopics.filter(id => topics.some(t => t.id === id)).length;
         
-        // Правая панель (меняется)
         let rightPanelHtml = '';
         
         if (currentMode === "topics") {
             rightPanelHtml = `
                 <div class="theory-block">
-                    <h2>Select a topic</h2>
-                    <p>Choose a topic from the list on the left to start learning.</p>
+                    <h2>Выберите тему</h2>
+                    <p>Выберите тему из списка слева, чтобы начать обучение.</p>
                     <div class="infinite-practice-area">
-                        <button class="btn-outline btn" id="globalInfiniteBtn">Practice mistakes + words</button>
+                        <button class="btn-outline btn" id="globalInfiniteBtn">Практика ошибок + слова</button>
                     </div>
                 </div>
             `;
@@ -494,10 +496,10 @@
             rightPanelHtml = `
                 <div class="theory-block">
                     <h2>${currentTopic.title}</h2>
-                    <div class="mistake-stats">Mistakes in this topic: ${mistakeHistory.filter(m => m.grammarFocus === currentTopic.grammarFocus).length}</div>
+                    <div class="mistake-stats">Ошибок в теме: ${mistakeHistory.filter(m => m.grammarFocus === currentTopic.grammarFocus).length}</div>
                     <div style="line-height:1.6; margin: 20px 0;">${currentTopic.theory}</div>
-                    <button class="btn" id="startPracticeBtn">Go to practice (20 tasks)</button>
-                    <button class="btn-outline btn" id="backToTopicsBtn">Back to topics</button>
+                    <button class="btn" id="startPracticeBtn">Начать практику (20 заданий)</button>
+                    <button class="btn-outline btn" id="backToTopicsBtn">Назад к темам</button>
                 </div>
             `;
         } else if (currentMode === "practice" && currentPracticeTasks.length) {
@@ -506,15 +508,15 @@
             const isAnswered = practiceAnswers[currentTaskIdx] !== null;
             rightPanelHtml = `
                 <div class="practice-block">
-                    <div class="flex-between" style="display:flex; justify-content:space-between; margin-bottom:16px;">
-                        <h3>Practice: ${currentTopic?.title || 'Mistake practice'}</h3>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
+                        <h3>Практика: ${currentTopic?.title || 'Практика ошибок'}</h3>
                         <span>${currentTaskIdx+1}/${currentPracticeTasks.length}</span>
                     </div>
                     <div class="progress"><div class="progress-fill" style="width:${(currentTaskIdx/currentPracticeTasks.length)*100}%"></div></div>
                     <div class="practice-question">
                         <p><strong>${task.question}</strong></p>
-                        ${task.type === 'choice' ? `<div class="options">${task.options.map(opt => `<div class="option" data-val="${opt}">${opt}</div>`).join('')}</div>` : `<input type="text" id="answerField" class="practice-input" placeholder="Your answer..." value="${userAnswer || ''}">`}
-                        <button class="btn" id="submitAnswerBtn" style="margin-top:12px">${isAnswered ? 'Change' : 'Check'}</button>
+                        ${task.type === 'choice' ? `<div class="options">${task.options.map(opt => `<div class="option" data-val="${opt}">${opt}</div>`).join('')}</div>` : `<input type="text" id="answerField" class="practice-input" placeholder="Ваш ответ..." value="${userAnswer || ''}">`}
+                        <button class="btn" id="submitAnswerBtn" style="margin-top:12px">${isAnswered ? 'Изменить' : 'Проверить'}</button>
                         ${showExplanation && lastMistakeInfo ? `<div class="ai-explanation">${lastMistakeInfo.explanation}</div>` : ''}
                     </div>
                 </div>
@@ -525,14 +527,14 @@
             const percent = Math.round((correctCount / total) * 100);
             rightPanelHtml = `
                 <div class="results-block">
-                    <h2>Practice results</h2>
+                    <h2>Результаты практики</h2>
                     <div style="text-align:center; margin: 40px 0;">
                         <div style="font-size: 48px; font-weight: bold; color: #0aff9d;">${correctCount}/${total}</div>
-                        <div style="font-size: 18px; margin-top: 8px;">${percent}% correct</div>
+                        <div style="font-size: 18px; margin-top: 8px;">${percent}% правильно</div>
                     </div>
                     <div class="progress"><div class="progress-fill" style="width:${percent}%"></div></div>
-                    ${percent >= 70 ? '<p style="margin: 20px 0; text-align:center;">Topic completed! Well done.</p>' : '<p style="margin: 20px 0; text-align:center;">Review the theory and try again.</p>'}
-                    <button class="btn" id="backToTopicsBtn">Back to topics</button>
+                    ${percent >= 70 ? '<p style="margin: 20px 0; text-align:center;">Тема пройдена! Отличная работа.</p>' : '<p style="margin: 20px 0; text-align:center;">Повторите теорию и попробуйте снова.</p>'}
+                    <button class="btn" id="backToTopicsBtn">Назад к темам</button>
                 </div>
             `;
         }
@@ -542,12 +544,12 @@
                 <div class="topics-header">
                     <h3><span class="glow-text">Aevi</span> · ${currentLevel}</h3>
                     <select id="levelSelect" class="level-selector">
-                        <option value="A1" ${currentLevel==='A1' ? 'selected' : ''}>Level A1 (Beginner)</option>
-                        <option value="A2" ${currentLevel==='A2' ? 'selected' : ''}>Level A2 (Elementary)</option>
-                        <option value="B1" ${currentLevel==='B1' ? 'selected' : ''}>Level B1 (Intermediate)</option>
-                        <option value="B2" ${currentLevel==='B2' ? 'selected' : ''}>Level B2 (Upper Intermediate)</option>
-                        <option value="C1" ${currentLevel==='C1' ? 'selected' : ''}>Level C1 (Advanced)</option>
-                        <option value="C2" ${currentLevel==='C2' ? 'selected' : ''}>Level C2 (Proficient)</option>
+                        <option value="A1" ${currentLevel==='A1' ? 'selected' : ''}>Уровень A1 (Начальный)</option>
+                        <option value="A2" ${currentLevel==='A2' ? 'selected' : ''}>Уровень A2 (Элементарный)</option>
+                        <option value="B1" ${currentLevel==='B1' ? 'selected' : ''}>Уровень B1 (Средний)</option>
+                        <option value="B2" ${currentLevel==='B2' ? 'selected' : ''}>Уровень B2 (Выше среднего)</option>
+                        <option value="C1" ${currentLevel==='C1' ? 'selected' : ''}>Уровень C1 (Продвинутый)</option>
+                        <option value="C2" ${currentLevel==='C2' ? 'selected' : ''}>Уровень C2 (Профессиональный)</option>
                     </select>
                 </div>
                 <div class="progress"><div class="progress-fill" style="width:${(completedCount/topics.length)*100}%"></div></div>
@@ -555,13 +557,12 @@
                     ${topicListHtml}
                 </div>
                 <div class="infinite-practice-area">
-                    <button class="btn-outline btn" id="globalInfiniteBtn">Practice mistakes + words</button>
+                    <button class="btn-outline btn" id="globalInfiniteBtn">Практика ошибок + слова</button>
                 </div>
             </div>
             <div class="content-panel" id="rightPanel">${rightPanelHtml}</div>
         `;
 
-        // События
         document.getElementById('levelSelect')?.addEventListener('change', (e) => {
             currentLevel = e.target.value;
             topics = KNOWLEDGE_BASE.English[currentLevel] || [];
@@ -581,7 +582,6 @@
         
         document.getElementById('startPracticeBtn')?.addEventListener('click', startTopicPractice);
         document.getElementById('backToTopicsBtn')?.addEventListener('click', backToTopics);
-        
         document.getElementById('globalInfiniteBtn')?.addEventListener('click', startInfinitePractice);
         
         document.getElementById('submitAnswerBtn')?.addEventListener('click', () => {
