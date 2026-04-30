@@ -403,6 +403,30 @@ Are they at home? → Yes, they are. / No, they aren't.`
         }
     };
 
+    // ==================== ПРАКТИКА (20 ЗАДАНИЙ) ====================
+const practiceTasks = [
+    { type: "input", question: "She ___ a doctor.", correct: "is", hint: "She + is — 3-е лицо" },
+    { type: "input", question: "I ___ happy.", correct: "am", hint: "I + am — 1-е лицо" },
+    { type: "input", question: "They ___ at home.", correct: "are", hint: "They + are — множественное число" },
+    { type: "input", question: "He ___ not tired.", correct: "is", hint: "He is not — отрицание" },
+    { type: "input", question: "We ___ friends.", correct: "are", hint: "We + are" },
+    { type: "input", question: "It ___ a cat.", correct: "is", hint: "It + is" },
+    { type: "input", question: "You ___ my best friend.", correct: "are", hint: "You + are" },
+    { type: "input", question: "I ___ from Russia.", correct: "am", hint: "I + am" },
+    { type: "input", question: "They ___ not ready.", correct: "are", hint: "They are not ready" },
+    { type: "input", question: "She ___ not a doctor.", correct: "is", hint: "She is not a doctor" },
+    { type: "choice", question: "___ you ready?", options: ["Am", "Is", "Are"], correct: "Are", hint: "Вопрос с you" },
+    { type: "choice", question: "___ she a doctor?", options: ["Am", "Is", "Are"], correct: "Is", hint: "Вопрос с she" },
+    { type: "choice", question: "___ I late?", options: ["Am", "Is", "Are"], correct: "Am", hint: "Вопрос с I" },
+    { type: "input", question: "The cat ___ black.", correct: "is", hint: "The cat = It → is" },
+    { type: "input", question: "My parents ___ at home.", correct: "are", hint: "parents = they → are" },
+    { type: "input", question: "I ___ not a teacher.", correct: "am", hint: "I am not a teacher" },
+    { type: "translate", question: "Переведите на английский: 'Они счастливы.'", correct: "they are happy", hint: "They are happy" },
+    { type: "translate", question: "Переведите на английский: 'Я не голоден.'", correct: "i am not hungry", hint: "I am not hungry" },
+    { type: "translate", question: "Переведите на английский: 'Ты мой друг.'", correct: "you are my friend", hint: "You are my friend" },
+    { type: "translate", question: "Переведите на английский: 'Она красивая.'", correct: "she is beautiful", hint: "She is beautiful" }
+];
+
     // Состояние
     let currentTab = "grammar";
     let currentTopic = null;
