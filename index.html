@@ -94,6 +94,11 @@
             border-color: #0aff9d;
         }
 
+        .topic-item.completed .topic-status {
+            background: #0aff9d;
+            color: #0B0E17;
+        }
+
         .topic-item.active {
             border-color: #0aff9d;
             box-shadow: 0 0 12px rgba(0, 255, 157, 0.3);
@@ -110,11 +115,6 @@
             justify-content: center;
             font-size: 12px;
             font-weight: bold;
-        }
-
-        .topic-item.completed .topic-status {
-            background: #0aff9d;
-            color: #0B0E17;
         }
 
         .topic-name {
@@ -197,7 +197,7 @@
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 12px;
             background: #0F1322;
             border-radius: 24px;
             margin-bottom: 16px;
@@ -205,18 +205,14 @@
         }
 
         .message {
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            border-radius: 20px;
-            max-width: 85%;
+            margin-bottom: 8px;
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 95%;
             word-wrap: break-word;
-        }
-
-        .user-message {
-            background: #0aff9d;
-            color: #0B0E17;
-            align-self: flex-end;
-            margin-left: auto;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.45;
         }
 
         .ai-message {
@@ -225,36 +221,28 @@
             color: #fff;
         }
 
-        .chat-input-area {
+        .button-panel {
             display: flex;
-            gap: 12px;
-            margin-top: auto;
-        }
-
-        .chat-input {
-            flex: 1;
-            background: #0a0f16;
-            border: 1px solid #2a3a4a;
-            border-radius: 40px;
-            padding: 12px 18px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .chat-send {
-            background: #0aff9d;
-            border: none;
-            border-radius: 40px;
-            padding: 0 20px;
-            font-weight: 700;
-            color: #0B0E17;
-            cursor: pointer;
-        }
-
-        .theory-btn {
-            background: #2A2F42;
-            border: 1px solid #0aff9d;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
             margin-bottom: 16px;
+        }
+
+        .question-btn {
+            background: #0F1322;
+            border: 1px solid #0aff9d;
+            border-radius: 40px;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #0aff9d;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .question-btn:hover {
+            background: #0aff9d20;
         }
 
         .vocabulary-grid {
@@ -326,14 +314,12 @@
             color: #ccffdd;
         }
 
-        .ai-explanation {
-            background: #0F1322;
-            border-radius: 24px;
-            padding: 16px;
-            margin-top: 20px;
-            border-left: 4px solid #0aff9d;
-            font-size: 0.9rem;
-            color: #CCDDFF;
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         @media (max-width: 780px) {
@@ -349,162 +335,874 @@
 <script>
     // ==================== ГРАММАТИЧЕСКИЕ ТЕМЫ A1 ====================
     const grammarTopics = [
-        { id: "g1", name: "Глагол TO BE (am/is/are)", grammarFocus: "to_be" },
-        { id: "g2", name: "Present Simple (I work, he works)", grammarFocus: "present_simple" },
-        { id: "g3", name: "Present Continuous (I am doing)", grammarFocus: "present_continuous" },
-        { id: "g4", name: "Модальный глагол CAN", grammarFocus: "can" },
-        { id: "g5", name: "Future: to be going to", grammarFocus: "going_to" },
-        { id: "g6", name: "Past Simple: was/were", grammarFocus: "was_were" },
-        { id: "g7", name: "Wh-questions (what, where, when...)", grammarFocus: "wh_questions" },
-        { id: "g8", name: "There is / There are", grammarFocus: "there_is_are" },
-        { id: "g9", name: "Like + verb-ing", grammarFocus: "like_ing" },
-        { id: "g10", name: "Местоимения (Subject, Object, Possessive)", grammarFocus: "pronouns" }
+        { id: "g1", name: "Глагол TO BE (am/is/are)" },
+        { id: "g2", name: "Present Simple (I work, he works)" },
+        { id: "g3", name: "Present Continuous (I am doing)" },
+        { id: "g4", name: "Модальный глагол CAN" },
+        { id: "g5", name: "Future: to be going to" },
+        { id: "g6", name: "Past Simple: was/were" },
+        { id: "g7", name: "Wh-questions (what, where, when)" },
+        { id: "g8", name: "There is / There are" },
+        { id: "g9", name: "Like + verb-ing (like reading)" },
+        { id: "g10", name: "Местоимения (I, me, my)" }
     ];
 
-    // ==================== ЛЕКСИЧЕСКИЕ ТЕМЫ A1 ====================
-    const vocabularyTopics = [
-        { id: "v1", name: "Numbers 1-100", vocabulary: [
-            { word: "one", translation: "один" }, { word: "two", translation: "два" }, { word: "three", translation: "три" },
-            { word: "four", translation: "четыре" }, { word: "five", translation: "пять" }, { word: "six", translation: "шесть" },
-            { word: "seven", translation: "семь" }, { word: "eight", translation: "восемь" }, { word: "nine", translation: "девять" },
-            { word: "ten", translation: "десять" }, { word: "twenty", translation: "двадцать" }, { word: "thirty", translation: "тридцать" },
-            { word: "forty", translation: "сорок" }, { word: "fifty", translation: "пятьдесят" }, { word: "sixty", translation: "шестьдесят" },
-            { word: "seventy", translation: "семьдесят" }, { word: "eighty", translation: "восемьдесят" }, { word: "ninety", translation: "девяносто" },
-            { word: "hundred", translation: "сто" }, { word: "first", translation: "первый" }, { word: "second", translation: "второй" }
-        ] },
-        { id: "v2", name: "Family", vocabulary: [
-            { word: "mother", translation: "мама" }, { word: "father", translation: "папа" }, { word: "brother", translation: "брат" },
-            { word: "sister", translation: "сестра" }, { word: "grandmother", translation: "бабушка" }, { word: "grandfather", translation: "дедушка" },
-            { word: "aunt", translation: "тётя" }, { word: "uncle", translation: "дядя" }, { word: "cousin", translation: "двоюродный брат/сестра" },
-            { word: "parents", translation: "родители" }, { word: "children", translation: "дети" }, { word: "son", translation: "сын" },
-            { word: "daughter", translation: "дочь" }, { word: "husband", translation: "муж" }, { word: "wife", translation: "жена" }
-        ] },
-        { id: "v3", name: "Home & Furniture", vocabulary: [
-            { word: "house", translation: "дом" }, { word: "room", translation: "комната" }, { word: "door", translation: "дверь" },
-            { word: "window", translation: "окно" }, { word: "wall", translation: "стена" }, { word: "floor", translation: "пол" },
-            { word: "table", translation: "стол" }, { word: "chair", translation: "стул" }, { word: "bed", translation: "кровать" },
-            { word: "sofa", translation: "диван" }, { word: "kitchen", translation: "кухня" }, { word: "bathroom", translation: "ванная" }
-        ] }
-    ];
+    // ==================== ПОЛНАЯ ТЕОРИЯ ДЛЯ КАЖДОЙ ТЕМЫ ====================
+    const theoryDB = {
+        "g1": {
+            full: `Глагол TO BE (am/is/are)
 
-    // ==================== ИИ ДЛЯ ОБЪЯСНЕНИЯ ТЕМ ====================
-    function getAIExplanation(topic) {
-        const focus = topic.grammarFocus;
-        if (focus === "to_be") {
-            return `Тема: Глагол TO BE (am/is/are)
+Значение: быть, находиться, являться. В русском языке часто опускается, но в английском обязателен.
 
-Описание: Глагол to be переводится как 'быть, находиться, являться'. В русском языке мы часто опускаем этот глагол, но в английском он обязателен.
-
-Формы глагола:
+Формы в настоящем времени:
 - I am (я есть)
 - He/She/It is (он/она/оно есть)
 - You/We/They are (ты/вы/мы/они есть)
 
-Примеры:
+Утверждение:
 I am a student. (Я студент)
 She is a doctor. (Она врач)
 We are happy. (Мы счастливы)
 
 Отрицание: добавляем not после глагола
 I am not tired. (Я не устал)
-He is not (isn't) at home. (Его нет дома)
+He is not (isn't) at home.
+They are not (aren't) ready.
 
-Вопрос: ставим глагол в начало предложения
+Вопрос: ставим глагол на первое место
 Am I late? (Я опоздал?)
 Is she your sister? (Она твоя сестра?)
+Are you OK? (Ты в порядке?)
 
-Чтобы закрепить тему, выполните практические задания.`;
-        } else if (focus === "present_simple") {
-            return `Тема: Present Simple (настоящее простое время)
+Короткие ответы:
+Yes, I am. / No, I'm not.
+Yes, she is. / No, she isn't.`,
+            examples: `Примеры с глаголом to be:
 
-Описание: Используется для описания фактов, привычек, расписаний.
+1. I am a teacher. (Я учитель)
+2. You are my friend. (Ты мой друг)
+3. He is from London. (Он из Лондона)
+4. She is beautiful. (Она красивая)
+5. It is a cat. (Это кот)
+6. We are students. (Мы студенты)
+7. They are at home. (Они дома)
+8. I am not ready. (Я не готов)
+9. Is she happy? (Она счастлива?)
+10. Are they coming? (Они идут?)`,
+            negative: `Отрицание с глаголом to be:
 
-Формула:
-- I/You/We/They + глагол (без изменений)
-- He/She/It + глагол + s/es
+Формула: подлежащее + am/is/are + not
+
+Сокращённые формы:
+I am not = I'm not
+He is not = He isn't
+She is not = She isn't
+It is not = It isn't
+You are not = You aren't
+We are not = We aren't
+They are not = They aren't
 
 Примеры:
-I work every day. (Я работаю каждый день)
-She works at a hospital. (Она работает в больнице)
-The sun rises in the east. (Солнце встает на востоке)
+I am not hungry. (Я не голоден)
+She is not (isn't) a doctor. (Она не врач)
+They are not (aren't) here. (Их здесь нет)
+
+Вопрос с отрицанием:
+Isn't she nice? (Разве она не мила?)
+Aren't you ready? (Разве ты не готов?)`,
+            questions: `Вопросы с глаголом to be:
+
+Формула: Am/Is/Are + подлежащее + ...?
+
+Примеры вопросов:
+Am I late? (Я опоздал?)
+Is she a doctor? (Она врач?)
+Are you ready? (Ты готов?)
+Is it cold outside? (На улице холодно?)
+Are they at home? (Они дома?)
+
+Короткие ответы:
+Am I? -> Yes, you are. / No, you aren't.
+Is she? -> Yes, she is. / No, she isn't.
+Are you? -> Yes, I am. / No, I'm not.
+Are they? -> Yes, they are. / No, they aren't.`
+        },
+        "g2": {
+            full: `Present Simple (настоящее простое время)
+
+Используется для:
+- Фактов (The sun rises in the east)
+- Привычек и рутины (I drink coffee every morning)
+- Расписаний (The train leaves at 6 PM)
+
+Формула:
+I/You/We/They + глагол (без изменений)
+He/She/It + глагол + s/es
+
+Утверждение:
+I work in an office.
+She works at a hospital.
+He goes to school.
 
 Отрицание:
-I don't like coffee. (Я не люблю кофе)
-She doesn't speak Spanish. (Она не говорит по-испански)
+I don't (do not) like coffee.
+She doesn't (does not) speak Spanish.
+They don't live in London.
 
 Вопрос:
+Do you like music?
+Does she play tennis?
+Do they know the answer?
+
+Короткие ответы:
+Yes, I do. / No, I don't.
+Yes, she does. / No, she doesn't.
+
+Правила добавления -es:
+- после s, ss, sh, ch, x, o: go -> goes, watch -> watches
+- согласная + y: study -> studies`,
+            examples: `Примеры Present Simple:
+
+Утверждение:
+1. I wake up at 7 AM every day.
+2. You speak English very well.
+3. He plays football on Sundays.
+4. She works in a bank.
+5. It rains a lot in autumn.
+6. We go to the gym twice a week.
+7. They live in a small town.
+
+Отрицание:
+8. I don't like spicy food.
+9. She doesn't eat meat.
+10. They don't have a car.
+
+Вопрос:
+11. Do you like pizza?
+12. Does he play the guitar?
+13. Where do they live?`,
+            negative: `Отрицание в Present Simple:
+
+Формула для I/You/We/They:
+подлежащее + do not (don't) + глагол
+
+Формула для He/She/It:
+подлежащее + does not (doesn't) + глагол
+
+ВАЖНО: после doesn't глагол возвращается в начальную форму (без -s).
+
+Примеры:
+I don't smoke. (Я не курю)
+You don't need to go. (Тебе не нужно идти)
+He doesn't like coffee. (Он не любит кофе)
+She doesn't work here. (Она здесь не работает)
+It doesn't matter. (Это не важно)
+We don't have time. (У нас нет времени)
+They don't know the answer. (Они не знают ответа)`,
+            questions: `Вопросы в Present Simple:
+
+Для I/You/We/They: Do + подлежащее + глагол?
+Для He/She/It: Does + подлежащее + глагол?
+
+Примеры:
 Do you like music? (Ты любишь музыку?)
+Do they speak English? (Они говорят по-английски?)
 Does she play tennis? (Она играет в теннис?)
+Does he work here? (Он здесь работает?)
 
-Правила добавления -es: после -s, -ss, -sh, -ch, -x, -o (go -> goes, watch -> watches)`;
-        } else {
-            return `Тема: ${topic.name}
+Специальные вопросы:
+What do you do? (Чем ты занимаешься?)
+Where does she live? (Где она живёт?)
+When do you get up? (Когда ты встаёшь?)
 
-Это важная грамматическая тема уровня A1. Чтобы получить подробное объяснение, выберите тему из списка слева.`;
-        }
-    }
+Короткие ответы:
+Yes, I do. / No, I don't.
+Yes, she does. / No, she doesn't.`
+        },
+        "g3": {
+            full: `Present Continuous (настоящее длительное время)
 
-    // ==================== ИИ ДЛЯ ОТВЕТОВ НА ВОПРОСЫ ====================
-    function getAIResponse(userMessage, topic) {
-        const msg = userMessage.toLowerCase();
-        
-        if (msg.includes('правило') || msg.includes('объясни') || msg.includes('расскажи')) {
-            return getAIExplanation(topic);
-        }
-        
-        if (msg.includes('пример')) {
-            if (topic.grammarFocus === "to_be") {
-                return "Примеры с глаголом to be:\n1. I am a teacher. (Я учитель)\n2. She is happy. (Она счастлива)\n3. They are at home. (Они дома)\n4. He is not late. (Он не опаздывает)\n5. Are you ready? (Ты готов?)";
-            } else if (topic.grammarFocus === "present_simple") {
-                return "Примеры Present Simple:\n1. I drink coffee every morning. (Я пью кофе каждое утро)\n2. She works in an office. (Она работает в офисе)\n3. The train leaves at 6 PM. (Поезд отправляется в 6)\n4. Do you like pizza? (Ты любишь пиццу?)\n5. He doesn't eat meat. (Он не ест мясо)";
-            }
-            return "Приведите конкретную тему, и я дам примеры.";
-        }
-        
-        if (msg.includes('отрицание')) {
-            if (topic.grammarFocus === "to_be") {
-                return "Отрицание с to be:\nI am not (I'm not)\nHe/She/It is not (isn't)\nYou/We/They are not (aren't)\nПример: She is not a doctor. = She isn't a doctor.";
-            } else if (topic.grammarFocus === "present_simple") {
-                return "Отрицание в Present Simple:\nI/You/We/They + do not (don't) + глагол\nHe/She/It + does not (doesn't) + глагол\nПример: I don't speak French. He doesn't like coffee.";
-            }
-            return "Напишите тему, и я объясню отрицание.";
-        }
-        
-        if (msg.includes('вопрос')) {
-            return "Чтобы задать вопрос, поставьте вспомогательный глагол на первое место.\n\nПримеры:\nAre you ready? (Ты готов?)\nDo you like music? (Ты любишь музыку?)\nDoes she work here? (Она здесь работает?)";
-        }
-        
-        if (msg.includes('помощь') || msg.includes('что делать')) {
-            return "Вы можете:\n1. Нажать 'Объяснить тему' для подробной теории\n2. Спросить про 'примеры'\n3. Спросить про 'отрицание'\n4. Спросить про 'вопросы'\n5. Задать свой вопрос по теме";
-        }
-        
-        return `Я помогу вам разобраться с темой "${topic.name}".\n\nНапишите:\n- 'объясни правило'\n- 'примеры'\n- 'отрицание'\n- 'вопросы'\n\nИли задайте свой вопрос.`;
-    }
+Используется для действий, которые происходят прямо сейчас, в момент речи.
 
-    // ==================== ГЕНЕРАЦИЯ ЗАДАНИЙ ====================
-    function generateTasks(topic) {
-        let tasks = [];
-        if (topic.grammarFocus === "to_be") {
-            tasks = [
-                { type: "input", question: "She ___ a doctor.", correct: "is", hint: "She + is" },
-                { type: "input", question: "I ___ happy.", correct: "am", hint: "I + am" },
-                { type: "input", question: "They ___ at home.", correct: "are", hint: "They + are" },
-                { type: "input", question: "He ___ not tired.", correct: "is", hint: "He is not" },
-                { type: "choice", question: "___ you ready?", options: ["Am", "Is", "Are"], correct: "Are", hint: "You + are" }
+Формула: to be (am/is/are) + глагол + ing
+
+Утверждение:
+I am reading a book now.
+She is watching TV.
+They are playing football.
+
+Отрицание:
+I am not sleeping.
+He isn't working.
+We aren't listening.
+
+Вопрос:
+Are you listening to me?
+Is she coming to the party?
+What are you doing?
+
+Слова-маркеры: now, at the moment, today, this week, right now
+
+Разница с Present Simple:
+- Present Simple: I work every day (обычно, всегда)
+- Present Continuous: I am working now (прямо сейчас)
+
+Правила добавления -ing:
+- большинство глаголов: +ing (work -> working)
+- глаголы на -e: убираем e + ing (come -> coming)
+- короткие глаголы: удваиваем согласную (run -> running)`,
+            examples: `Примеры Present Continuous:
+
+Утверждение:
+1. I am writing a letter right now.
+2. You are sitting on my chair.
+3. He is reading a newspaper.
+4. She is cooking dinner.
+5. It is raining outside.
+6. We are learning English.
+7. They are playing in the garden.
+
+Отрицание:
+8. I am not sleeping.
+9. She isn't working today.
+10. They aren't listening to me.
+
+Вопрос:
+11. Are you watching TV?
+12. Is she coming to the party?
+13. What are you doing here?`,
+            negative: `Отрицание в Present Continuous:
+
+Формула: подлежащее + am/is/are + not + глагол + ing
+
+Примеры:
+I am not reading. (Я не читаю)
+He is not (isn't) working. (Он не работает)
+She is not (isn't) sleeping. (Она не спит)
+We are not (aren't) playing. (Мы не играем)
+They are not (aren't) listening. (Они не слушают)
+
+Сокращённые формы:
+I'm not working
+He isn't working
+She isn't working
+We aren't working
+They aren't working`,
+            questions: `Вопросы в Present Continuous:
+
+Формула: Am/Is/Are + подлежащее + глагол + ing?
+
+Примеры:
+Am I doing it right? (Я правильно делаю?)
+Are you listening to me? (Ты меня слушаешь?)
+Is she sleeping? (Она спит?)
+Are they coming? (Они идут?)
+
+Специальные вопросы:
+What are you doing? (Что ты делаешь?)
+Where is she going? (Куда она идёт?)
+Why are you laughing? (Почему ты смеёшься?)`
+        },
+        "g4": {
+            full: `Модальный глагол CAN
+
+CAN означает "мочь, уметь, иметь возможность".
+
+Особенности:
+- не меняет форму (нет -s в 3-м лице)
+- после него идёт глагол без to
+- для отрицания и вопроса не нужен do/does
+
+Утверждение:
+I can swim. (Я умею плавать)
+She can speak French. (Она умеет говорить по-французски)
+They can come tomorrow. (Они могут прийти завтра)
+
+Отрицание: cannot или can't
+I can't drive a car. (Я не умею водить)
+He can't attend the meeting. (Он не может присутствовать)
+
+Вопрос:
+Can you help me? (Ты можешь мне помочь?)
+Can she play the piano? (Она умеет играть на пианино?)
+
+CAN для разрешения:
+You can go now. (Ты можешь идти)
+Can I open the window? (Можно я открою окно?)`,
+            examples: `Примеры с глаголом CAN:
+
+Утверждение:
+1. I can swim very well.
+2. You can do it!
+3. He can speak three languages.
+4. She can play the guitar.
+5. It can be dangerous.
+6. We can help you.
+7. They can come tomorrow.
+
+Отрицание:
+8. I can't understand this.
+9. She cannot drive a car.
+10. They can't hear you.
+
+Вопрос:
+11. Can you help me?
+12. Can she sing?
+13. Can we go now?
+
+Разрешение:
+14. You can take my book.
+15. Can I use your phone?`,
+            negative: `Отрицание с глаголом CAN:
+
+Формула: подлежащее + cannot (can't) + глагол
+
+Полная форма: cannot
+Короткая форма: can't
+
+Примеры:
+I can't swim. (Я не умею плавать)
+You can't park here. (Вам нельзя здесь парковаться)
+He can't speak Japanese. (Он не говорит по-японски)
+She can't find her keys. (Она не может найти ключи)
+It can't be true. (Это не может быть правдой)
+We can't wait any longer. (Мы не можем ждать дольше)
+They can't hear you. (Они тебя не слышат)`,
+            questions: `Вопросы с глаголом CAN:
+
+Формула: Can + подлежащее + глагол?
+
+Примеры вопросов:
+Can I help you? (Я могу вам помочь?)
+Can you speak English? (Ты говоришь по-английски?)
+Can he drive a car? (Он умеет водить машину?)
+Can she sing? (Она умеет петь?)
+Can we go now? (Мы можем идти?)
+Can they come tomorrow? (Они могут прийти завтра?)
+
+Короткие ответы:
+Yes, I can. / No, I can't.
+Yes, she can. / No, she can't.
+
+Can для разрешения:
+Can I open the window? (Можно я открою окно?)
+Can I use your phone? (Можно мне воспользоваться твоим телефоном?)`
+        },
+        "g5": {
+            full: `Конструкция to be going to
+
+Выражает:
+1. Планы и намерения на будущее (решение уже принято)
+2. Прогнозы, основанные на очевидных фактах
+
+Формула: to be (am/is/are) + going to + глагол
+
+Планы:
+I am going to study English. (Я собираюсь учить английский)
+She is going to travel to Spain. (Она собирается поехать в Испанию)
+We are going to buy a new car. (Мы собираемся купить новую машину)
+
+Прогнозы:
+Look at those clouds! It is going to rain. (Будет дождь)
+The traffic is terrible. We are going to be late. (Мы опоздаем)
+
+Отрицание:
+I am not going to call him.
+She isn't going to eat that.
+
+Вопрос:
+Are you going to come?
+Is she going to study?`,
+            examples: `Примеры to be going to:
+
+Планы:
+1. I am going to visit my parents tomorrow.
+2. You are going to like this movie.
+3. He is going to buy a new phone.
+4. She is going to start a new job.
+5. We are going to have dinner at 7 PM.
+6. They are going to move to a new flat.
+
+Прогнозы:
+7. Look! It is going to snow.
+8. The glass is going to fall.
+9. He is going to win the race.
+
+Отрицание:
+10. I am not going to tell him.
+11. She isn't going to accept this job.
+
+Вопрос:
+12. Are you going to stay here?
+13. Is he going to call me?`,
+            negative: `Отрицание в to be going to:
+
+Формула: подлежащее + am/is/are + not + going to + глагол
+
+Примеры:
+I am not going to do it. (Я не собираюсь это делать)
+You aren't going to believe this. (Ты не поверишь этому)
+He isn't going to come. (Он не собирается приходить)
+She isn't going to accept the offer. (Она не примет предложение)
+We aren't going to wait. (Мы не будем ждать)
+They aren't going to help us. (Они не будут нам помогать)
+
+Короткие формы:
+I'm not going to
+You aren't going to
+He isn't going to
+We aren't going to`,
+            questions: `Вопросы в to be going to:
+
+Формула: Am/Is/Are + подлежащее + going to + глагол?
+
+Примеры:
+Am I going to regret this? (Я пожалею об этом?)
+Are you going to stay here? (Ты собираешься здесь остаться?)
+Is he going to call me? (Он мне позвонит?)
+Is she going to study abroad? (Она будет учиться за границей?)
+Are we going to win? (Мы выиграем?)
+Are they going to help us? (Они нам помогут?)
+
+Специальные вопросы:
+What are you going to do? (Что ты собираешься делать?)
+Where is she going to live? (Где она будет жить?)
+When are they going to arrive? (Когда они приедут?)`
+        },
+        "g6": {
+            full: `Past Simple глагола TO BE (was/were)
+
+В прошедшем времени to be имеет две формы:
+- I/He/She/It was (я/он/она/оно был/а/о)
+- You/We/They were (ты/вы/мы/они были)
+
+Утверждение:
+I was tired yesterday. (Я устал вчера)
+She was a teacher. (Она была учителем)
+They were at home. (Они были дома)
+
+Отрицание:
+I was not (wasn't) late.
+We were not (weren't) ready.
+
+Вопрос:
+Was she happy? (Она была счастлива?)
+Were you at school? (Ты был в школе?)
+
+Короткие ответы:
+Yes, I was. / No, I wasn't.
+Yes, they were. / No, they weren't.`,
+            examples: `Примеры was/were:
+
+Утверждение:
+1. I was born in 1990.
+2. You were very kind to me.
+3. He was a famous actor.
+4. She was my best friend.
+5. It was a great day.
+6. We were at the cinema.
+7. They were very happy.
+
+Отрицание:
+8. I wasn't at home yesterday.
+9. She wasn't ready for the exam.
+10. They weren't interested.
+
+Вопрос:
+11. Was he angry?
+12. Were you at the party?
+13. Was the movie good?`,
+            negative: `Отрицание с was/were:
+
+Формула: подлежащее + was/were + not
+
+Сокращённые формы:
+I was not = I wasn't
+He was not = He wasn't
+She was not = She wasn't
+It was not = It wasn't
+You were not = You weren't
+We were not = We weren't
+They were not = They weren't
+
+Примеры:
+I wasn't there. (Меня там не было)
+He wasn't happy. (Он не был счастлив)
+She wasn't late. (Она не опоздала)
+We weren't ready. (Мы не были готовы)
+They weren't at home. (Их не было дома)`,
+            questions: `Вопросы с was/were:
+
+Формула: Was/Were + подлежащее + ...?
+
+Примеры:
+Was I right? (Я был прав?)
+Were you at the party? (Ты был на вечеринке?)
+Was he happy? (Он был счастлив?)
+Was she tired? (Она устала?)
+Was it cold yesterday? (Вчера было холодно?)
+Were we late? (Мы опоздали?)
+Were they at home? (Они были дома?)
+
+Короткие ответы:
+Was he? -> Yes, he was. / No, he wasn't.
+Were they? -> Yes, they were. / No, they weren't.`
+        },
+        "g7": {
+            full: `Wh-questions (специальные вопросы)
+
+Вопросительные слова:
+What - что? какой?
+Where - где? куда?
+When - когда?
+Who - кто?
+Why - почему?
+How - как?
+
+Структура:
+Wh-слово + вспомогательный глагол + подлежащее + смысловой глагол?
+
+Примеры:
+What do you do? (Чем ты занимаешься?)
+Where does she live? (Где она живёт?)
+When do you get up? (Когда ты встаёшь?)
+Who is that? (Кто это?)
+Why are you late? (Почему ты опоздал?)
+How are you? (Как дела?)
+
+Специальные вопросы с how:
+How old are you? (Сколько тебе лет?)
+How much does it cost? (Сколько это стоит?)
+How many books do you have? (Сколько у тебя книг?)`,
+            examples: `Примеры Wh-questions:
+
+What:
+What is your name? (Как тебя зовут?)
+What do you want? (Что ты хочешь?)
+
+Where:
+Where do you live? (Где ты живёшь?)
+Where is the station? (Где станция?)
+
+When:
+When do you wake up? (Когда ты просыпаешься?)
+When is your birthday? (Когда твой день рождения?)
+
+Who:
+Who is that man? (Кто этот мужчина?)
+Who called you? (Кто тебе позвонил?)
+
+Why:
+Why are you crying? (Почему ты плачешь?)
+Why did you do that? (Почему ты это сделал?)
+
+How:
+How are you? (Как дела?)
+How old are you? (Сколько тебе лет?)
+How much is this? (Сколько это стоит?)`,
+            negative: `Отрицательные Wh-вопросы (редко, но используются):
+
+Why aren't you coming? (Почему ты не идёшь?)
+Why didn't you call me? (Почему ты мне не позвонил?)
+What don't you understand? (Что ты не понимаешь?)
+Where haven't you been? (Где ты не был?)
+
+Используются для выражения удивления или разочарования.`,
+            questions: `Структура Wh-вопросов по временам:
+
+Present Simple:
+What do you do? / Where does she live?
+
+Present Continuous:
+What are you doing? / Where is she going?
+
+Past Simple:
+What did you do? / Where did she go?
+
+Future (will):
+What will you do? / When will he come?
+
+to be:
+Who is that? / Where are you? / How old is she?`
+        },
+        "g8": {
+            full: `Конструкция There is / There are
+
+Используется для обозначения наличия или существования чего-либо.
+
+There is + единственное число:
+There is a cat on the sofa. (На диване кот)
+There is a problem. (Есть проблема)
+
+There are + множественное число:
+There are two windows in the room. (В комнате два окна)
+There are many people here. (Здесь много людей)
+
+Отрицание:
+There isn't a phone here. (Здесь нет телефона)
+There aren't any chairs. (Нет стульев)
+
+Вопрос:
+Is there a supermarket near here? (Рядом есть супермаркет?)
+Are there any problems? (Есть проблемы?)`,
+            examples: `Примеры There is / There are:
+
+Утверждение:
+1. There is a book on the table.
+2. There is some milk in the fridge.
+3. There are three chairs in the room.
+4. There are many stars in the sky.
+
+Отрицание:
+5. There isn't any sugar left.
+6. There aren't any students in the class.
+
+Вопрос:
+7. Is there a bank near here?
+8. Are there any letters for me?
+
+Разговорные обороты:
+There's a phone call for you. (Тебе звонят)
+There are lots of things to do. (Есть много дел)`,
+            negative: `Отрицание с There is / There are:
+
+There is + not + any / существует more natural:
+There isn't any water left. (Воды не осталось)
+There isn't a single person here. (Здесь нет ни одного человека)
+
+There are + not + any:
+There aren't any apples. (Нет яблок)
+There aren't any problems. (Нет проблем)
+
+Для неисчисляемых существительных:
+There isn't any sugar. (Нет сахара)
+There isn't much time. (Нет много времени)`,
+            questions: `Вопросы с There is / There are:
+
+Общие вопросы:
+Is there a phone? (Есть телефон?)
+Are there any chairs? (Есть стулья?)
+
+Специальные вопросы:
+How many rooms are there? (Сколько комнат?)
+What is there in the box? (Что в коробке?)
+
+Короткие ответы:
+Is there...? -> Yes, there is. / No, there isn't.
+Are there...? -> Yes, there are. / No, there aren't.`
+        },
+        "g9": {
+            full: `Конструкция Like / love / hate + verb-ing
+
+После глаголов like, love, hate, enjoy, prefer используется глагол с окончанием -ing.
+
+Утверждение:
+I like reading books. (Мне нравится читать книги)
+She loves dancing. (Она любит танцевать)
+He hates getting up early. (Он ненавидит вставать рано)
+
+Отрицание:
+I don't like cooking. (Я не люблю готовить)
+She doesn't like driving. (Она не любит водить)
+
+Вопрос:
+Do you like swimming? (Ты любишь плавать?)
+Does he like watching TV? (Он любит смотреть телевизор?)`,
+            examples: `Примеры like/love/hate + verb-ing:
+
+1. I like playing tennis.
+2. She loves reading novels.
+3. He hates doing homework.
+4. We enjoy travelling.
+5. They prefer staying at home.
+6. I don't like getting up early.
+7. She doesn't like cooking.
+8. Do you like swimming?
+9. Does he like playing football?
+10. What do you like doing in your free time?`,
+            negative: `Отрицание с like/love/hate + verb-ing:
+
+Формула:
+I/You/We/They + don't like + verb-ing
+He/She/It + doesn't like + verb-ing
+
+Примеры:
+I don't like waiting. (Я не люблю ждать)
+She doesn't like studying. (Она не любит учиться)
+We don't like being late. (Мы не любим опаздывать)
+
+С love/hate:
+I don't love cooking. (Я не люблю готовить — слабее, чем hate)
+He doesn't hate waking up early. (Он не ненавидит рано вставать)`,
+            questions: `Вопросы с like/love/hate + verb-ing:
+
+Общие вопросы:
+Do you like running? (Ты любишь бегать?)
+Does she like singing? (Она любит петь?)
+Do they like travelling? (Они любят путешествовать?)
+
+Специальные вопросы:
+What do you like doing? (Что ты любишь делать?)
+What does he hate doing? (Что он ненавидит делать?)
+Why do you like swimming? (Почему ты любишь плавать?)`
+        },
+        "g10": {
+            full: `Местоимения в английском языке
+
+Три типа местоимений:
+
+1. Subject Pronouns (кто? что? - подлежащее):
+I, you, he, she, it, we, they
+
+2. Object Pronouns (кого? кому? - дополнение):
+me, you, him, her, it, us, them
+
+3. Possessive Pronouns (чей? - притяжательные):
+my, your, his, her, its, our, their
+
+Таблица:
+Subject | Object | Possessive
+I       | me     | my
+you     | you    | your
+he      | him    | his
+she     | her    | her
+it      | it     | its
+we      | us     | our
+they    | them   | their
+
+Примеры:
+I love her. (Я люблю её)
+She gave me her phone. (Она дала мне свой телефон)
+They told us their secret. (Они рассказали нам свой секрет)
+This is my book. (Это моя книга)`,
+            examples: `Примеры местоимений:
+
+Subject Pronouns (подлежащее):
+1. I am a student.
+2. You are my friend.
+3. He is a doctor.
+4. She is a teacher.
+5. It is a cat.
+6. We are happy.
+7. They are at home.
+
+Object Pronouns (дополнение):
+8. Give me the book.
+9. I love you.
+10. I saw him yesterday.
+11. Tell her the truth.
+12. Take it.
+13. We need them.
+
+Possessive Pronouns (притяжательные):
+14. This is my phone.
+15. Is this your bag?
+16. His car is new.
+17. Her name is Anna.
+18. Our house is big.
+19. Their children are nice.`,
+            negative: `Отрицание с местоимениями (примеры):
+
+I don't know him. (Я его не знаю)
+She didn't see me. (Она меня не видела)
+They don't believe us. (Они нам не верят)
+He hasn't told her. (Он ей не сказал)
+We don't need them. (Они нам не нужны)
+
+Притяжательные местоимения в отрицании:
+It's not my fault. (Это не моя вина)
+That's not your problem. (Это не твоя проблема)
+This is not his book. (Это не его книга)`,
+            questions: `Вопросы с местоимениями:
+
+Do you know him? (Ты его знаешь?)
+Did she call me? (Она мне звонила?)
+Are they waiting for us? (Они нас ждут?)
+Is this your bag? (Это твоя сумка?)
+Whose phone is this? (Чей это телефон?)
+Who is that? (Кто это?)
+What is her name? (Как её зовут?)`
+        }
+    };
+
+    // Лексические темы
+    const vocabularyTopics = [
+        { id: "v1", name: "Numbers (числа 1-100)", words: [
+            "one - один", "two - два", "three - три", "four - четыре", "five - пять",
+            "six - шесть", "seven - семь", "eight - восемь", "nine - девять", "ten - десять",
+            "eleven - одиннадцать", "twelve - двенадцать", "thirteen - тринадцать", "fourteen - четырнадцать", "fifteen - пятнадцать",
+            "sixteen - шестнадцать", "seventeen - семнадцать", "eighteen - восемнадцать", "nineteen - девятнадцать", "twenty - двадцать",
+            "thirty - тридцать", "forty - сорок", "fifty - пятьдесят", "sixty - шестьдесят", "seventy - семьдесят",
+            "eighty - восемьдесят", "ninety - девяносто", "hundred - сто", "first - первый", "second - второй", "third - третий"
+        ] },
+        { id: "v2", name: "Family (семья)", words: [
+            "mother - мама", "father - папа", "parents - родители", "brother - брат", "sister - сестра",
+            "son - сын", "daughter - дочь", "grandmother - бабушка", "grandfather - дедушка", "aunt - тётя",
+            "uncle - дядя", "cousin - двоюродный брат/сестра", "husband - муж", "wife - жена", "children - дети"
+        ] },
+        { id: "v3", name: "Home & Furniture (дом и мебель)", words: [
+            "house - дом", "apartment - квартира", "room - комната", "kitchen - кухня", "bathroom - ванная",
+            "bedroom - спальня", "living room - гостиная", "door - дверь", "window - окно", "floor - пол",
+            "wall - стена", "table - стол", "chair - стул", "bed - кровать", "sofa - диван", "wardrobe - шкаф"
+        ] }
+    ];
+
+    // Добавляем остальные лексические темы
+    vocabularyTopics.push(
+        { id: "v4", name: "Food & Drink (еда и напитки)", words: [
+            "bread - хлеб", "water - вода", "milk - молоко", "coffee - кофе", "tea - чай",
+            "apple - яблоко", "banana - банан", "orange - апельсин", "meat - мясо", "chicken - курица",
+            "fish - рыба", "rice - рис", "pasta - паста", "soup - суп", "salad - салат", "cake - торт"
+        ] },
+        { id: "v5", name: "Clothes (одежда)", words: [
+            "shirt - рубашка", "t-shirt - футболка", "trousers - брюки", "jeans - джинсы", "dress - платье",
+            "skirt - юбка", "jacket - куртка", "coat - пальто", "shoes - туфли", "boots - ботинки",
+            "trainers - кроссовки", "hat - шапка", "scarf - шарф", "gloves - перчатки"
+        ] },
+        { id: "v6", name: "Weather & Seasons (погода и времена года)", words: [
+            "sun - солнце", "rain - дождь", "snow - снег", "wind - ветер", "cloud - облако",
+            "hot - жарко", "cold - холодно", "warm - тепло", "cool - прохладно", "summer - лето",
+            "winter - зима", "spring - весна", "autumn - осень", "sunny - солнечно", "rainy - дождливо"
+        ] }
+    );
+
+    // Генерация заданий
+    function generateTasks(topicId) {
+        const topic = grammarTopics.find(t => t.id === topicId);
+        if (!topic) return [];
+        
+        if (topicId === "g1") {
+            return [
+                { type: "input", question: "She ___ a doctor.", correct: "is" },
+                { type: "input", question: "I ___ happy.", correct: "am" },
+                { type: "input", question: "They ___ at home.", correct: "are" },
+                { type: "input", question: "He ___ not tired.", correct: "is" },
+                { type: "choice", question: "___ you ready?", options: ["Am", "Is", "Are"], correct: "Are" },
+                { type: "input", question: "We ___ friends.", correct: "are" },
+                { type: "input", question: "It ___ a cat.", correct: "is" },
+                { type: "choice", question: "She ___ a student.", options: ["am", "is", "are"], correct: "is" }
+            ];
+        } else if (topicId === "g2") {
+            return [
+                { type: "input", question: "She ___ (work) every day.", correct: "works" },
+                { type: "input", question: "I ___ (like) coffee.", correct: "like" },
+                { type: "choice", question: "He ___ to school.", options: ["go", "goes", "going"], correct: "goes" },
+                { type: "input", question: "They ___ (live) in London.", correct: "live" },
+                { type: "choice", question: "___ you like music?", options: ["Do", "Does", "Is"], correct: "Do" }
             ];
         } else {
-            tasks = [
-                { type: "input", question: "She ___ (work) every day.", correct: "works", hint: "She + works" },
-                { type: "input", question: "I ___ (like) coffee.", correct: "like", hint: "I + like" }
+            return [
+                { type: "input", question: "Translate: hello", correct: "привет" },
+                { type: "input", question: "Translate: goodbye", correct: "до свидания" },
+                { type: "input", question: "Translate: thank you", correct: "спасибо" },
+                { type: "input", question: "Translate: please", correct: "пожалуйста" },
+                { type: "input", question: "Translate: yes", correct: "да" },
+                { type: "input", question: "Translate: no", correct: "нет" }
             ];
         }
-        while (tasks.length < 10) {
-            tasks.push({ type: "input", question: "Translate: success", correct: "success", hint: "success - успех" });
-        }
-        return tasks;
     }
 
-    // ==================== СОСТОЯНИЕ ====================
+    // Состояние
     let currentTab = "grammar";
     let currentTopic = null;
     let currentMode = "topics";
@@ -513,8 +1211,6 @@ Does she play tennis? (Она играет в теннис?)
     let currentTaskIdx = 0;
     let userAnswers = [];
     let results = [];
-    let showAIHint = false;
-    let currentAIHint = "";
     let completedTopics = JSON.parse(localStorage.getItem("aevi_completed")) || [];
 
     function saveCompleted() {
@@ -531,7 +1227,7 @@ Does she play tennis? (Она играет в теннис?)
     function selectTopic(topic) {
         currentTopic = topic;
         if (currentTab === "grammar") {
-            chatMessages = [];
+            chatMessages = [{ role: "ai", content: `Вы выбрали тему: ${topic.name}. Нажмите на кнопку, чтобы получить информацию.` }];
             currentMode = "chat";
         } else {
             currentMode = "vocabulary";
@@ -539,33 +1235,17 @@ Does she play tennis? (Она играет в теннис?)
         renderApp();
     }
 
-    function explainTopic() {
-        const explanation = getAIExplanation(currentTopic);
-        chatMessages.push({ role: "ai", content: explanation });
-        renderApp();
-    }
-
-    function sendMessage() {
-        const input = document.getElementById("chatInput");
-        if (!input || !input.value.trim()) return;
-        
-        const userMessage = input.value.trim();
-        chatMessages.push({ role: "user", content: userMessage });
-        
-        const aiResponse = getAIResponse(userMessage, currentTopic);
-        chatMessages.push({ role: "ai", content: aiResponse });
-        
-        input.value = "";
+    function addAIMessage(content) {
+        chatMessages.push({ role: "ai", content: content });
         renderApp();
     }
 
     function startPractice() {
-        currentTasks = generateTasks(currentTopic);
+        currentTasks = generateTasks(currentTopic.id);
         currentTaskIdx = 0;
         userAnswers = new Array(currentTasks.length).fill(null);
         results = new Array(currentTasks.length).fill(false);
         currentMode = "practice";
-        showAIHint = false;
         renderApp();
     }
 
@@ -577,7 +1257,6 @@ Does she play tennis? (Она играет в теннис?)
         
         if (currentTaskIdx + 1 < currentTasks.length) {
             currentTaskIdx++;
-            showAIHint = false;
             renderApp();
         } else {
             finishPractice();
@@ -596,6 +1275,17 @@ Does she play tennis? (Она играет в теннис?)
         currentMode = "topics";
         currentTopic = null;
         renderApp();
+    }
+
+    function getTheoryResponse(type) {
+        const data = theoryDB[currentTopic.id];
+        if (!data) return "Информация по этой теме будет добавлена.";
+        
+        if (type === "full") return data.full;
+        if (type === "examples") return data.examples;
+        if (type === "negative") return data.negative;
+        if (type === "questions") return data.questions;
+        return data.full;
     }
 
     function renderApp() {
@@ -628,52 +1318,50 @@ Does she play tennis? (Она играет в теннис?)
             `;
         } else if (currentMode === "chat" && currentTopic) {
             const messagesHtml = chatMessages.map(msg => `
-                <div class="message ${msg.role === 'user' ? 'user-message' : 'ai-message'}">
+                <div class="message ai-message">
                     ${msg.content}
                 </div>
             `).join('');
             
             rightPanelHtml = `
                 <div class="chat-container">
-                    <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                    <div class="header-buttons">
                         <h2>${currentTopic.name}</h2>
-                        <button class="btn-outline btn" id="explainBtn" style="width: auto; margin-top: 0; padding: 8px 16px;">Объяснить тему</button>
-                        <button class="btn-outline btn" id="practiceBtn" style="width: auto; margin-top: 0; padding: 8px 16px;">Практика</button>
-                        <button class="btn-outline btn" id="backBtn" style="width: auto; margin-top: 0; padding: 8px 16px;">Назад</button>
+                        <button class="btn-outline" id="practiceBtn" style="padding: 8px 16px;">Практика</button>
+                        <button class="btn-outline" id="backBtn" style="padding: 8px 16px;">Назад</button>
                     </div>
                     <div class="chat-messages" id="chatMessages">
                         ${messagesHtml}
                     </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" class="chat-input" placeholder="Спросите ИИ о грамматике...">
-                        <button class="chat-send" id="sendBtn">Отправить</button>
+                    <div class="button-panel">
+                        <button class="question-btn" data-type="full">Полная теория</button>
+                        <button class="question-btn" data-type="examples">Примеры</button>
+                        <button class="question-btn" data-type="negative">Отрицание</button>
+                        <button class="question-btn" data-type="questions">Вопросы</button>
                     </div>
                 </div>
             `;
         } else if (currentMode === "vocabulary" && currentTopic) {
-            const vocabList = currentTopic.vocabulary;
-            const vocabHtml = `
-                <div class="vocabulary-grid">
-                    ${vocabList.map(v => `
-                        <div class="vocab-card">
-                            <div class="vocab-word">${v.word}</div>
-                            <div class="vocab-translation">${v.translation}</div>
-                        </div>
-                    `).join('')}
+            const wordsHtml = currentTopic.words.map(w => `
+                <div class="vocab-card">
+                    <div class="vocab-word">${w.split(" - ")[0]}</div>
+                    <div class="vocab-translation">${w.split(" - ")[1]}</div>
                 </div>
-            `;
+            `).join('');
+            
             rightPanelHtml = `
                 <div class="chat-container">
-                    <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                    <div class="header-buttons">
                         <h2>${currentTopic.name}</h2>
-                        <button class="btn-outline btn" id="backBtn" style="width: auto; margin-top: 0; padding: 8px 16px;">Назад</button>
+                        <button class="btn-outline" id="backBtn" style="padding: 8px 16px;">Назад</button>
                     </div>
-                    ${vocabHtml}
+                    <div class="vocabulary-grid">
+                        ${wordsHtml}
+                    </div>
                 </div>
             `;
         } else if (currentMode === "practice" && currentTasks.length) {
             const task = currentTasks[currentTaskIdx];
-            const isAnswered = userAnswers[currentTaskIdx] !== null;
             rightPanelHtml = `
                 <div class="practice-block">
                     <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
@@ -689,10 +1377,9 @@ Does she play tennis? (Она играет в теннис?)
                             </div>` : 
                             `<input type="text" id="answerInput" class="practice-input" placeholder="Введите ответ...">`
                         }
-                        ${!isAnswered ? `<button class="btn" id="submitBtn">Проверить</button>` : ''}
-                        ${showAIHint ? `<div class="ai-explanation">${currentAIHint}</div>` : ''}
+                        <button class="btn" id="submitBtn">Проверить</button>
                     </div>
-                    <button class="btn-outline btn" id="backToChatBtn" style="margin-top: 12px;">Назад к чату</button>
+                    <button class="btn-outline" id="backToChatBtn" style="margin-top: 12px;">Назад к чату</button>
                 </div>
             `;
         } else if (currentMode === "results") {
@@ -706,7 +1393,7 @@ Does she play tennis? (Она играет в теннис?)
                         <div style="font-size: 18px;">${percent}% правильно</div>
                     </div>
                     <div class="progress"><div class="progress-fill" style="width:${percent}%"></div></div>
-                    ${percent >= 70 ? '<p style="margin: 20px 0; text-align:center;">Тема пройдена! Отличная работа.</p>' : '<p style="margin: 20px 0; text-align:center;">Повторите тему и попробуйте снова.</p>'}
+                    ${percent >= 70 ? '<p style="margin: 20px 0; text-align:center;">Тема пройдена. Отличная работа.</p>' : '<p style="margin: 20px 0; text-align:center;">Повторите тему и попробуйте снова.</p>'}
                     <button class="btn" id="backToChatBtn">Вернуться к чату</button>
                 </div>
             `;
@@ -729,7 +1416,6 @@ Does she play tennis? (Она играет в теннис?)
             <div class="content-panel" id="rightPanel">${rightPanelHtml}</div>
         `;
 
-        // События
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 currentTab = btn.dataset.tab;
@@ -741,22 +1427,30 @@ Does she play tennis? (Она играет в теннис?)
 
         document.querySelectorAll('.topic-item').forEach(el => {
             const topicId = el.dataset.id;
-            const topic = currentTopics.find(t => t.id === topicId);
+            let topic;
+            if (currentTab === "grammar") {
+                topic = grammarTopics.find(t => t.id === topicId);
+            } else {
+                topic = vocabularyTopics.find(t => t.id === topicId);
+            }
             if (topic) {
                 el.addEventListener('click', () => selectTopic(topic));
             }
         });
 
-        document.getElementById('explainBtn')?.addEventListener('click', explainTopic);
         document.getElementById('practiceBtn')?.addEventListener('click', startPractice);
         document.getElementById('backBtn')?.addEventListener('click', backToTopics);
         document.getElementById('backToChatBtn')?.addEventListener('click', () => {
             currentMode = "chat";
             renderApp();
         });
-        document.getElementById('sendBtn')?.addEventListener('click', sendMessage);
-        document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
+        
+        document.querySelectorAll('.question-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const type = btn.dataset.type;
+                const response = getTheoryResponse(type);
+                addAIMessage(response);
+            });
         });
         
         document.getElementById('submitBtn')?.addEventListener('click', () => {
@@ -776,7 +1470,6 @@ Does she play tennis? (Она играет в теннис?)
             });
         });
         
-        // Автоскролл чата
         const chatMessagesDiv = document.getElementById('chatMessages');
         if (chatMessagesDiv) {
             chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
