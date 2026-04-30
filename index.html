@@ -3,364 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Aevi — Изучение языков</title>
+    <title>Aevi — A1 English Learning</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #0B0E17;
-            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
-            color: #FFFFFF;
-            padding: 1rem;
-        }
-
-        .app-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-        }
-
-        .topics-panel {
-            flex: 2;
-            min-width: 260px;
-            background: rgba(18, 22, 35, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            border: 1px solid rgba(0, 255, 157, 0.2);
-            padding: 1.5rem;
-            height: fit-content;
-        }
-
-        .topics-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 1.5rem;
-        }
-
-        .level-selector {
-            background: #0F1322;
-            border: 1px solid #2A2F42;
-            border-radius: 48px;
-            padding: 8px 16px;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .topic-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 60vh;
-            overflow-y: auto;
-            padding-right: 6px;
-        }
-
-        .topic-item {
-            background: #111624;
-            border-radius: 60px;
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid #282E44;
-        }
-
-        .topic-item.completed {
-            background: rgba(0, 255, 157, 0.12);
-            border-color: #0aff9d;
-        }
-
-        .topic-item.completed .topic-status {
-            background: #0aff9d;
-            color: #0B0E17;
-        }
-
-        .topic-item.active {
-            border-color: #0aff9d;
-            box-shadow: 0 0 12px rgba(0, 255, 157, 0.3);
-            background: #1A2035;
-        }
-
-        .topic-status {
-            width: 28px;
-            height: 28px;
-            background: #2A2F42;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .topic-name {
-            flex: 1;
-            font-weight: 500;
-        }
-
-        .topic-badge {
-            font-size: 11px;
-            background: #00c3ff20;
-            padding: 4px 10px;
-            border-radius: 60px;
-            color: #7df9ff;
-        }
-
-        .content-panel {
-            flex: 5;
-            min-width: 300px;
-            background: rgba(12, 15, 26, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 32px;
-            border: 1px solid rgba(0, 255, 157, 0.25);
-            padding: 1.8rem;
-        }
-
-        .glow-text {
-            background: linear-gradient(135deg, #BFFFC7, #7DF9FF);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 700;
-        }
-
-        .btn {
-            background: linear-gradient(95deg, #0aff9d, #00c3ff);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 60px;
-            font-weight: 700;
-            color: #0B0E17;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
-            font-size: 1rem;
-            transition: 0.2s;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #0aff9d;
-            color: #0aff9d;
-        }
-
-        .ai-explanation {
-            background: #0F1322;
-            border-radius: 24px;
-            padding: 16px;
-            margin-top: 20px;
-            border-left: 4px solid #0aff9d;
-            font-size: 0.9rem;
-            color: #CCDDFF;
-        }
-
-        .infinite-practice-area {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 24px;
-            padding: 16px;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .mistake-stats {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            font-size: 12px;
-            margin-bottom: 12px;
-            color: #8A93B0;
-        }
-
-        .progress {
-            margin: 10px 0;
-            height: 6px;
-            background: #1e2a32;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #0aff9d, #00c3ff);
-        }
-
-        .practice-question {
-            background: #11161f;
-            border-radius: 24px;
-            padding: 1.2rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .practice-input {
-            background: #0a0f16;
-            border: 1px solid #2a3a4a;
-            border-radius: 40px;
-            padding: 12px 18px;
-            width: 100%;
-            color: white;
-            margin: 12px 0;
-            font-size: 1rem;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option {
-            background: #0f141c;
-            padding: 12px 18px;
-            border-radius: 40px;
-            cursor: pointer;
-            border: 1px solid #2c3a4a;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .option:hover {
-            border-color: #0aff9d;
-            background: #1a2a2f;
-        }
-
-        .selected {
-            background: #0aff9d20;
-            border-color: #0aff9d;
-            color: #ccffdd;
-        }
-
-        .theory-block, .practice-block, .results-block {
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 780px) {
-            .app-container {
-                flex-direction: column;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0B0E17; font-family: 'Segoe UI', system-ui; color: #fff; padding: 1rem; }
+        .app-container { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; }
+        
+        /* Левая панель */
+        .topics-panel { flex: 2; min-width: 260px; background: rgba(18,22,35,0.7); backdrop-filter: blur(12px); border-radius: 32px; border: 1px solid rgba(0,255,157,0.2); padding: 1.5rem; height: fit-content; }
+        .topics-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 1.5rem; }
+        .tab-switch { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab-btn { background: #0F1322; border: 1px solid #2A2F42; border-radius: 40px; padding: 8px 16px; cursor: pointer; font-weight: 500; transition: 0.2s; }
+        .tab-btn.active { background: #0aff9d; color: #0B0E17; border-color: #0aff9d; }
+        .topic-list { display: flex; flex-direction: column; gap: 10px; max-height: 60vh; overflow-y: auto; padding-right: 6px; }
+        .topic-item { background: #111624; border-radius: 60px; padding: 12px 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; border: 1px solid #282E44; transition: 0.2s; }
+        .topic-item.completed { background: rgba(0,255,157,0.12); border-color: #0aff9d; }
+        .topic-item.active { border-color: #0aff9d; box-shadow: 0 0 12px rgba(0,255,157,0.3); background: #1A2035; }
+        .topic-status { width: 28px; height: 28px; background: #2A2F42; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+        .topic-item.completed .topic-status { background: #0aff9d; color: #0B0E17; }
+        .topic-name { flex: 1; font-weight: 500; }
+        .topic-badge { font-size: 11px; background: #00c3ff20; padding: 4px 10px; border-radius: 60px; color: #7df9ff; }
+        
+        /* Правая панель */
+        .content-panel { flex: 5; min-width: 300px; background: rgba(12,15,26,0.6); backdrop-filter: blur(10px); border-radius: 32px; border: 1px solid rgba(0,255,157,0.25); padding: 1.8rem; max-height: 80vh; overflow-y: auto; }
+        .glow-text { background: linear-gradient(135deg, #BFFFC7, #7DF9FF); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
+        .btn { background: linear-gradient(95deg, #0aff9d, #00c3ff); border: none; padding: 12px 24px; border-radius: 60px; font-weight: 700; color: #0B0E17; cursor: pointer; width: 100%; margin-top: 1rem; font-size: 1rem; transition: 0.2s; }
+        .btn-outline { background: transparent; border: 1px solid #0aff9d; color: #0aff9d; }
+        .ai-explanation { background: #0F1322; border-radius: 24px; padding: 16px; margin-top: 20px; border-left: 4px solid #0aff9d; font-size: 0.9rem; color: #CCDDFF; }
+        .progress { margin: 10px 0; height: 6px; background: #1e2a32; border-radius: 10px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #0aff9d, #00c3ff); }
+        .practice-question { background: #11161f; border-radius: 24px; padding: 1.2rem; margin-bottom: 1.2rem; }
+        .practice-input { background: #0a0f16; border: 1px solid #2a3a4a; border-radius: 40px; padding: 12px 18px; width: 100%; color: white; margin: 12px 0; font-size: 1rem; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { background: #0f141c; padding: 12px 18px; border-radius: 40px; cursor: pointer; border: 1px solid #2c3a4a; text-align: center; }
+        .option:hover { border-color: #0aff9d; background: #1a2a2f; }
+        .selected { background: #0aff9d20; border-color: #0aff9d; color: #ccffdd; }
+        .theory-page { animation: fadeIn 0.3s ease; }
+        .theory-page h3 { color: #0aff9d; margin: 20px 0 10px; }
+        .theory-page .example { background: #0F1322; border-left: 3px solid #0aff9d; padding: 12px; margin: 12px 0; border-radius: 12px; font-family: monospace; }
+        .theory-page .rule-table { background: #0F1322; border-radius: 16px; padding: 12px; margin: 16px 0; overflow-x: auto; }
+        .theory-page table { width: 100%; border-collapse: collapse; }
+        .theory-page th, .theory-page td { padding: 8px; text-align: left; border-bottom: 1px solid #2A2F42; }
+        .theory-page th { color: #0aff9d; }
+        .theory-nav { display: flex; gap: 12px; margin-top: 24px; }
+        .theory-nav button { flex: 1; margin-top: 0; }
+        .vocabulary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+        .vocab-card { background: #0F1322; border-radius: 16px; padding: 12px; border: 1px solid #2A2F42; }
+        .vocab-word { font-weight: bold; color: #0aff9d; }
+        .vocab-translation { font-size: 0.9rem; color: #8A93B0; margin-top: 4px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 780px) { .app-container { flex-direction: column; } }
     </style>
 </head>
 <body>
 <div class="app-container" id="app"></div>
 
 <script>
-    // ==================== ПОЛНАЯ БАЗА ТЕМ A1-C2 (РУССКИЙ ЯЗЫК) ====================
-    const KNOWLEDGE_BASE = {
-        English: {
-            A1: [
-                { id: "a1_1", title: "Приветствия и знакомство", grammarFocus: "to be", theory: "<strong>Приветствия и глагол TO BE</strong><br><br>I am Alex. / You are a student. (Я Алекс. / Ты студент.)<br><strong>Отрицание:</strong> I am not (I'm not) tired. (Я не устал.)<br><strong>Вопрос:</strong> Are you ready? (Ты готов?)" },
-                { id: "a1_2", title: "Глагол TO BE", grammarFocus: "to be", theory: "<strong>Спряжение глагола TO BE</strong><br><br>I am, He/She/It is, You/We/They are<br>Я есть, Он/Она/Оно есть, Ты/Мы/Они есть<br>+ I am happy. (Я счастлив.)<br>- I am not sad. (Я не грустный.)<br>? Are you OK? (Ты в порядке?)" },
-                { id: "a1_3", title: "Множественное число", grammarFocus: "plural", theory: "<strong>Множественное число существительных</strong><br><br>cat → cats (кот → коты)<br>bus → buses (автобус → автобусы)<br>lady → ladies (леди → леди)<br><strong>Исключения:</strong> man → men, child → children, foot → feet" },
-                { id: "a1_4", title: "Артикли A / AN / THE", grammarFocus: "articles", theory: "<strong>Артикли в английском языке</strong><br><br>a + согласный звук (a dog — собака)<br>an + гласный звук (an apple — яблоко)<br>THE — когда речь о конкретном предмете: the sun (солнце), the car we saw (машина, которую мы видели)" },
-                { id: "a1_5", title: "Present Simple", grammarFocus: "present simple", theory: "<strong>Настоящее простое время (Present Simple)</strong><br><br>I work / He works (Я работаю / Он работает)<br>- I don't work / He doesn't work (Я не работаю / Он не работает)<br>? Do you work? / Does she work? (Ты работаешь? / Она работает?)" }
-            ],
-            A2: [
-                { id: "a2_1", title: "Past Simple (правильные глаголы)", grammarFocus: "past simple", theory: "<strong>Прошедшее простое время (Past Simple) — правильные глаголы</strong><br><br>+ed: I played, she watched (Я играл, она смотрела)<br>- didn't play (не играл)<br>? Did you play? (Ты играл?)" },
-                { id: "a2_2", title: "Неправильные глаголы (часть 1)", grammarFocus: "irregular verbs", theory: "<strong>Неправильные глаголы — нужно запомнить</strong><br><br>go → went (идти → пошёл)<br>see → saw (видеть → увидел)<br>buy → bought (покупать → купил)<br>think → thought (думать → подумал)<br>eat → ate (есть → съел)" },
-                { id: "a2_3", title: "Future Simple (will)", grammarFocus: "future", theory: "<strong>Будущее простое время (Future Simple)</strong><br><br>I will call you tomorrow. (Я позвоню тебе завтра.)<br>- won't (не буду)<br>? Will you come? (Ты придёшь?)" },
-                { id: "a2_4", title: "Конструкция to be going to", grammarFocus: "future plans", theory: "<strong>Конструкция to be going to (собираться сделать)</strong><br><br>I am going to study Spanish. (Я собираюсь учить испанский.)<br>Выражает запланированное действие." }
-            ],
-            B1: [
-                { id: "b1_1", title: "Present Perfect", grammarFocus: "present perfect", theory: "<strong>Настоящее совершённое время (Present Perfect)</strong><br><br>I have visited London. (Я был в Лондоне.)<br>She has never tried sushi. (Она никогда не пробовала суши.)<br>Слова-маркеры: ever (когда-либо), never (никогда), already (уже), yet (ещё), since (с), for (в течение)" },
-                { id: "b1_2", title: "Present Perfect Continuous", grammarFocus: "present perfect continuous", theory: "<strong>Настоящее совершённое длительное время</strong><br><br>I have been waiting for 2 hours. (Я жду уже 2 часа.)<br>Акцент на длительности действия." },
-                { id: "b1_3", title: "Условные предложения (0,1 тип)", grammarFocus: "conditionals", theory: "<strong>Условные предложения</strong><br><br>0 тип (факты): If you heat ice, it melts. (Если нагреть лёд, он тает.)<br>1 тип (реальное условие): If it rains, I will stay home. (Если пойдёт дождь, я останусь дома.)" },
-                { id: "b1_4", title: "Модальные глаголы (can, could, may)", grammarFocus: "modals", theory: "<strong>Модальные глаголы</strong><br><br>can — способность (I can swim — Я умею плавать)<br>could — вежливая просьба (Could you help me? — Не могли бы вы помочь?)<br>may — разрешение (May I come in? — Можно войти?)" }
-            ],
-            B2: [
-                { id: "b2_1", title: "Пассивный залог", grammarFocus: "passive", theory: "<strong>Пассивный залог (Passive Voice)</strong><br><br>The book was written by Tolstoy. (Книга была написана Толстым.)<br>Формула: to be + V3 (причастие прошедшего времени)." },
-                { id: "b2_2", title: "Условные предложения (2,3 тип)", grammarFocus: "conditionals", theory: "<strong>Условные предложения 2 и 3 типа</strong><br><br>2 тип (нереальное настоящее): If I were rich, I would travel. (Если бы я был богат, я бы путешествовал.)<br>3 тип (нереальное прошлое): If you had called, I would have helped. (Если бы ты позвонил, я бы помог.)" },
-                { id: "b2_3", title: "Косвенная речь", grammarFocus: "reported speech", theory: "<strong>Косвенная речь (Reported Speech)</strong><br><br>She said that she was tired. (Она сказала, что устала.)<br>Сдвиг времён: настоящее → прошедшее." },
-                { id: "b2_4", title: "Относительные придаточные", grammarFocus: "clauses", theory: "<strong>Относительные придаточные (Relative Clauses)</strong><br><br>The man who called you is my brother. (Человек, который тебе звонил, — мой брат.)<br>The book which I bought is interesting. (Книга, которую я купил, интересная.)" }
-            ],
-            C1: [
-                { id: "c1_1", title: "Инверсия", grammarFocus: "inversion", theory: "<strong>Инверсия (Inversion)</strong><br><br>Never have I seen such beauty. (Никогда я не видел такой красоты.)<br>Not only did she arrive late, but she also forgot her keys. (Она не только опоздала, но и забыла ключи.)" },
-                { id: "c1_2", title: "Сослагательное наклонение", grammarFocus: "subjunctive", theory: "<strong>Сослагательное наклонение (Subjunctive)</strong><br><br>I suggest that he go to the doctor. (Я предлагаю, чтобы он пошёл к врачу.)<br>It's essential that she be informed. (Важно, чтобы её проинформировали.)" },
-                { id: "c1_3", title: "Смешанные условные", grammarFocus: "mixed conditionals", theory: "<strong>Смешанные условные предложения</strong><br><br>If he had studied, he would be an expert now. (Если бы он учился, он был бы сейчас экспертом.)<br>Смешивает время в условии и результате." },
-                { id: "c1_4", title: "Эллипсис", grammarFocus: "ellipsis", theory: "<strong>Эллипсис (Ellipsis)</strong><br><br>'Can you help?' 'I can.' (Можешь помочь? Могу.)<br>Пропуск слов, понятных из контекста." }
-            ],
-            C2: [
-                { id: "c2_1", title: "Идиомы", grammarFocus: "idioms", theory: "<strong>Идиомы</strong><br><br>'Spill the beans' — выдать секрет.<br>'Hit the nail on the head' — точно описать проблему." },
-                { id: "c2_2", title: "Продвинутая инверсия", grammarFocus: "advanced inversion", theory: "<strong>Продвинутая инверсия</strong><br><br>'Had I known, I would have acted.' (Если бы я знал, я бы действовал.)<br>'Such was his anger that he left.' (Так велик был его гнев, что он ушёл.)" },
-                { id: "c2_3", title: "Номинализация", grammarFocus: "nominalization", theory: "<strong>Номинализация</strong><br><br>'The discovery of the cure' вместо 'They discovered the cure'<br>Делает текст более формальным." },
-                { id: "c2_4", title: "Риторические приёмы", grammarFocus: "rhetoric", theory: "<strong>Риторические приёмы</strong><br><br>Анафора: 'We shall fight on the beaches, we shall fight...' (Мы будем сражаться на пляжах, мы будем сражаться...)" }
-            ]
-        }
-    };
+    // ==================== ГРАММАТИЧЕСКИЕ ТЕМЫ A1 ====================
+    const grammarTopics = [
+        { id: "g1", name: "Глагол TO BE (am/is/are): утверждение, отрицание, вопросы", grammarFocus: "to_be" },
+        { id: "g2", name: "Present Simple (I work, he works) для фактов и рутины", grammarFocus: "present_simple" },
+        { id: "g3", name: "Present Continuous (I am doing) для действий прямо сейчас", grammarFocus: "present_continuous" },
+        { id: "g4", name: "Модальный глагол CAN (способность/разрешение)", grammarFocus: "can" },
+        { id: "g5", name: "Будущее время: to be going to (для планов и прогнозов)", grammarFocus: "going_to" },
+        { id: "g6", name: "Past Simple глагола TO BE (was/were)", grammarFocus: "was_were" },
+        { id: "g7", name: "Порядок слов в вопросе: Wh-questions", grammarFocus: "wh_questions" },
+        { id: "g8", name: "Конструкция There is / There are", grammarFocus: "there_is_are" },
+        { id: "g9", name: "Like / love / hate + verb -ing (I like reading)", grammarFocus: "like_ing" },
+        { id: "g10", name: "Местоимения: Subject, Object, Possessive", grammarFocus: "pronouns" },
+        { id: "g11", name: "Предлоги места и времени: in, on, at", grammarFocus: "prepositions" },
+        { id: "g12", name: "Притяжательный падеж 's (John's car)", grammarFocus: "possessive_s" },
+        { id: "g13", name: "Множественное число существительных", grammarFocus: "plural_nouns" },
+        { id: "g14", name: "Указательные местоимения: this / that / these / those", grammarFocus: "demonstrative" },
+        { id: "g15", name: "Неопределённые местоимения: some / any", grammarFocus: "some_any" },
+        { id: "g16", name: "Наречия частотности (always, usually, sometimes, never)", grammarFocus: "adverbs_frequency" }
+    ];
 
-    // Дополняем уровни до 8 тем
-    for (let lvl of ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']) {
-        const current = KNOWLEDGE_BASE.English[lvl];
-        const need = 8;
-        while (current.length < need) {
-            const num = current.length + 1;
-            current.push({
-                id: `${lvl.toLowerCase()}_extra_${num}`,
-                title: `${lvl} — Тема ${num}: дополнительная практика`,
-                grammarFocus: "general",
-                theory: `<strong>Расширенный урок уровня ${lvl}</strong><br><br>Изучаем продвинутые конструкции уровня ${lvl}.<br>Пример: "They have been mastering these skills."<br>Практика через упражнения.`
-            });
+    // ==================== ЛЕКСИЧЕСКИЕ ТЕМЫ A1 ====================
+    const vocabularyTopics = [
+        { id: "v1", name: "Numbers: 1–100 и порядковые числительные", vocabType: "numbers" },
+        { id: "v2", name: "Alphabet & spelling", vocabType: "alphabet" },
+        { id: "v3", name: "Family: mother, father, brother, sister...", vocabType: "family" },
+        { id: "v4", name: "Home & furniture: room, door, table, chair, bed...", vocabType: "home" },
+        { id: "v5", name: "Daily routine: get up, have breakfast, go to work...", vocabType: "daily" },
+        { id: "v6", name: "Food & drink: water, bread, apple, coffee...", vocabType: "food" },
+        { id: "v7", name: "Clothes: shirt, shoes, trousers, dress...", vocabType: "clothes" },
+        { id: "v8", name: "Weather & seasons: sun, rain, hot, cold...", vocabType: "weather" },
+        { id: "v9", name: "Animals: domestic & common wild", vocabType: "animals" },
+        { id: "v10", name: "Places in town: shop, school, hospital, park...", vocabType: "places" },
+        { id: "v11", name: "Transport: car, bus, train, plane, bike...", vocabType: "transport" },
+        { id: "v12", name: "Jobs: teacher, doctor, driver, student...", vocabType: "jobs" },
+        { id: "v13", name: "Basic adjectives: big/small, good/bad, cheap/expensive...", vocabType: "adjectives" },
+        { id: "v14", name: "Colours: red, blue, yellow, green, black, white...", vocabType: "colours" },
+        { id: "v15", name: "Days, months, time (o'clock и half past)", vocabType: "time" }
+    ];
+
+    // ==================== ГЕНЕРАЦИЯ ПОДРОБНОЙ ТЕОРИИ ====================
+    function generateTheory(topic) {
+        const focus = topic.grammarFocus;
+        const name = topic.name;
+        
+        if (focus === "to_be") {
+            return [
+                { title: "1. Значение глагола TO BE", content: "<h3>Что означает глагол TO BE?</h3><p>В русском языке мы не говорим 'я есть студент', мы просто говорим 'я студент'. В английском языке глагол to be (быть, находиться, являться) используется всегда.</p><div class='example'>📌 I am a student. = Я (есть) студент. → Я студент.<br>📌 She is a doctor. = Она (есть) врач.<br>📌 We are happy. = Мы (есть) счастливы. → Мы счастливы.</div>" },
+                { title: "2. Формы TO BE в настоящем времени", content: "<div class='rule-table'><table><th>Местоимение</th><th>Форма</th><th>Сокращение</th><tr><td>I</td><td>am</td><td>I'm</td></tr><tr><td>He/She/It</td><td>is</td><td>He's</td></tr><tr><td>You/We/They</td><td>are</td><td>You're</td></tr></table><div class='example'>📌 Правило: <strong>Я am, Он/Она is, А для всех остальных are</strong></div>" },
+                { title: "3. Отрицание", content: "<h3>Как сказать «НЕ»</h3><p>Добавляем частицу <strong>not</strong> после глагола.</p><div class='example'>I am not tired. (Я не устал)<br>He is not (isn't) at home.<br>We are not (aren't) ready.</div>" },
+                { title: "4. Вопросы", content: "<h3>Как задать вопрос</h3><p>Ставим глагол на первое место.</p><div class='example'>Am I late? (Я опоздал?)<br>Is she your sister? (Она твоя сестра?)<br>Are you OK? (Ты в порядке?)</div><p><strong>Короткие ответы:</strong> Yes, I am. / No, she isn't.</p>" },
+                { title: "5. Три главных случая использования", content: "<ul><li><strong>Кто или что это:</strong> He is a driver.</li><li><strong>Где находится:</strong> Moscow is a big city.</li><li><strong>Состояние:</strong> I am cold. She is 20.</li></ul>" }
+            ];
+        } else if (focus === "present_simple") {
+            return [
+                { title: "1. Что такое Present Simple?", content: "<p>Present Simple используется для:</p><ul><li>Обычных, повторяющихся действий (привычек)</li><li>Фактов и общеизвестных истин</li><li>Расписаний</li></ul><div class='example'>📌 I drink coffee every morning.<br>📌 The sun rises in the east.</div>" },
+                { title: "2. Утверждение", content: "<div class='rule-table'></td><th>Подлежащее</th><th>Формула</th><tr><td>I/You/We/They</td><td>глагол</td></tr><tr><td>He/She/It</td><td>глагол + -s/-es</td></tr></table><p>Правила добавления -es: после -s, -ss, -sh, -ch, -x, -o; y → i + es</p><div class='example'>I work. / She works. / He goes.</div>" },
+                { title: "3. Отрицание", content: "<div class='rule-table'><tr><th>Подлежащее</th><th>Формула</th><tr><td>I/You/We/They</td><td>don't + глагол</td></tr><tr><td>He/She/It</td><td>doesn't + глагол</td></table></div><div class='example'>I don't like coffee. / She doesn't speak Spanish.</div>" },
+                { title: "4. Вопросы", content: "<div class='rule-table'><tr><th>Вопрос</th><th>Структура</th></tr><tr><td>Do</td><td>Do + I/you/we/they + глагол?</td></tr><tr><td>Does</td><td>Does + he/she/it + глагол?</td></tr></table><div class='example'>Do you like music? / Does she play tennis?</div><p>Короткие ответы: Yes, I do. / No, she doesn't.</p>" }
+            ];
+        } else if (focus === "present_continuous") {
+            return [
+                { title: "1. Что такое Present Continuous?", content: "<p>Present Continuous используется для действий, которые происходят прямо сейчас, в момент речи.</p><div class='example'>📌 I am reading a book now.<br>📌 She is watching TV at the moment.</div><p><strong>Слова-маркеры:</strong> now, at the moment, today</p>" },
+                { title: "2. Образование", content: "<div class='rule-table'><tr><th>Подлежащее</th><th>Формула</th><tr><td>I</td><td>am + глагол-ing</td></tr><tr><td>He/She/It</td><td>is + глагол-ing</td></tr><tr><td>You/We/They</td><td>are + глагол-ing</td></tr></table><div class='example'>I am working. / She is sleeping. / They are playing.</div>" },
+                { title: "3. Отрицание и вопросы", content: "<h3>Отрицание:</h3><div class='example'>I am not working. / She isn't sleeping.</div><h3>Вопросы:</h3><div class='example'>Are you working? / Is she sleeping?</div><p>Короткие ответы: Yes, I am. / No, she isn't.</p>" }
+            ];
+        } else if (focus === "can") {
+            return [
+                { title: "1. Модальный глагол CAN", content: "<p><strong>CAN</strong> означает 'мочь, уметь, иметь возможность'. Он не меняет форму (нет -s в 3-м лице).</p><div class='example'>I can swim. (Я умею плавать)<br>She can speak French. (Она умеет говорить по-французски)</div><p><strong>CAN также используется для разрешения:</strong> You can go now. (Ты можешь идти)</p>" },
+                { title: "2. Отрицание и вопросы", content: "<h3>Отрицание: cannot (can't)</h3><div class='example'>I can't swim. (Я не умею плавать)</div><h3>Вопросы:</h3><div class='example'>Can you swim? (Ты умеешь плавать?)<br>Yes, I can. / No, I can't.</div>" }
+            ];
+        } else if (focus === "going_to") {
+            return [
+                { title: "1. Конструкция to be going to", content: "<p>Используется для выражения:</p><ul><li>Планов на будущее (решение уже принято)</li><li>Прогнозов, основанных на очевидных фактах</li></ul><div class='example'>I am going to study English. (Я собираюсь учить английский)<br>Look at those clouds! It is going to rain. (Будет дождь)</div>" },
+                { title: "2. Образование", content: "<div class='rule-table'><tr><th>Подлежащее</th><th>Формула</th><tr><td>I</td><td>am going to + глагол</td></tr><tr><td>He/She/It</td><td>is going to + глагол</td></tr><tr><td>You/We/They</td><td>are going to + глагол</td></tr></table><div class='example'>I am going to call you. / She is going to travel.</div>" }
+            ];
+        } else if (focus === "was_were") {
+            return [
+                { title: "1. Past Simple глагола TO BE", content: "<p>В прошедшем времени to be имеет две формы:</p><div class='rule-table'><tr><th>Подлежащее</th><th>Форма</th><tr><td>I / He / She / It</td><td>was</td></tr><tr><td>You / We / They</td><td>were</td></tr></table><div class='example'>I was tired yesterday.<br>They were at home.</div>" },
+                { title: "2. Отрицание и вопросы", content: "<h3>Отрицание:</h3><div class='example'>I was not (wasn't) tired.<br>They were not (weren't) at home.</div><h3>Вопросы:</h3><div class='example'>Was she happy? / Were you at school?</div>" }
+            ];
+        } else if (focus === "wh_questions") {
+            return [
+                { title: "1. Wh-вопросы в английском", content: "<p>Специальные вопросы начинаются с вопросительных слов:</p><ul><li><strong>What</strong> — что? какой?</li><li><strong>Where</strong> — где? куда?</li><li><strong>When</strong> — когда?</li><li><strong>Who</strong> — кто?</li><li><strong>Why</strong> — почему?</li><li><strong>How</strong> — как?</li></ul>" },
+                { title: "2. Структура Wh-вопроса", content: "<div class='rule-table'><tr><th>Формула</th><td>Wh-слово + вспом.глагол + подлежащее + смысл.глагол?</td></tr></div><div class='example'>What do you do? (Что ты делаешь?)<br>Where does she live? (Где она живёт?)<br>Why are you late? (Почему ты опоздал?)</div>" }
+            ];
+        } else if (focus === "there_is_are") {
+            return [
+                { title: "1. Конструкция There is / There are", content: "<p>Используется для обозначения наличия или существования чего-либо.</p><div class='rule-table'><tr><th>There is</th><td>+ единственное число</td><td>There is a cat.</td></tr><tr><th>There are</th><td>+ множественное число</td><td>There are two cats.</td></tr></div><h3>Отрицание:</h3><div class='example'>There isn't a cat. / There aren't any cats.</div><h3>Вопрос:</h3><div class='example'>Is there a cat? / Are there any cats?</div>" }
+            ];
+        } else if (focus === "like_ing") {
+            return [
+                { title: "1. Конструкция like/love/hate + verb-ing", content: "<p>После глаголов like, love, hate, enjoy используется глагол с окончанием -ing.</p><div class='example'>I like reading books. (Мне нравится читать)<br>She loves dancing. (Она любит танцевать)<br>He hates getting up early. (Он ненавидит вставать рано)</div>" }
+            ];
+        } else if (focus === "pronouns") {
+            return [
+                { title: "1. Личные и притяжательные местоимения", content: "<div class='rule-table'><tr><th>Subject (кто?)</th><th>Object (кого? кому?)</th><th>Possessive (чей?)</th></tr><td>I</td><td>me</td><td>my</td></tr><tr><td>you</td><td>you</td><td>your</td></tr><tr><td>he</td><td>him</td><td>his</td></tr><tr><td>she</td><td>her</td><td>her</td></tr><tr><td>it</td><td>it</td><td>its</td></tr><tr><td>we</td><td>us</td><td>our</td></tr><tr><td>they</td><td>them</td><td>their</td></tr></tr><div class='example'>I love her. (Я люблю её) / This is my book. (Это моя книга)</div>" }
+            ];
+        } else if (focus === "prepositions") {
+            return [
+                { title: "1. Предлоги времени IN / ON / AT", content: "<div class='rule-table'><tr><th>AT</th><td>время: at 5 o'clock, at night, at the weekend</td></td><tr><th>ON</th><td>дни и даты: on Monday, on July 5th</td></tr><tr><th>IN</th><td>месяцы, годы, сезоны: in May, in 2024, in summer</td></tr></table><h3>Предлоги места:</h3><div class='example'>in the room (в комнате), on the table (на столе), at the station (на станции)</div>" }
+            ];
+        } else if (focus === "possessive_s") {
+            return [
+                { title: "1. Притяжательный падеж 's", content: "<p>Апостроф + s ('s) показывает принадлежность.</p><div class='example'>John's car — машина Джона<br>My mother's house — дом моей мамы</div><p>Для существительных во множественном числе добавляем только апостроф ('): parents' car — машина родителей</p>" }
+            ];
+        } else if (focus === "plural_nouns") {
+            return [
+                { title: "1. Множественное число существительных", content: "<div class='rule-table'><tr><th>Правило</th><th>Пример</th></tr><tr><td>+s</td><td>cat → cats</td></tr><tr><td>+es (после -s,-ss,-sh,-ch,-x,-o)</td><td>bus → buses, box → boxes</td></tr><tr><td>y→i+es</td><td>lady → ladies</td></tr><tr><td>Исключения</td><td>man→men, child→children, tooth→teeth</td></tr></div>" }
+            ];
+        } else if (focus === "demonstrative") {
+            return [
+                { title: "1. Указательные местоимения", content: "<div class='rule-table'><tr><th>this</th><td>этот/эта/это (рядом)</td><td>This is a pen.</td></tr><tr><th>that</th><td>тот/та/то (далеко)</td><td>That is a car.</td></tr><tr><th>these</th><td>эти (рядом)</td><td>These are apples.</td></tr><tr><th>those</th><td>те (далеко)</td><td>Those are mountains.</td></tr></table>" }
+            ];
+        } else if (focus === "some_any") {
+            return [
+                { title: "1. Some и Any", content: "<p><strong>Some</strong> используется в утвердительных предложениях и вопросах-предложениях.</p><p><strong>Any</strong> используется в отрицаниях и общих вопросах.</p><div class='example'>I have some milk. (У меня есть немного молока)<br>I don't have any money. (У меня нет денег)<br>Do you have any questions? (У тебя есть вопросы?)</div>" }
+            ];
+        } else if (focus === "adverbs_frequency") {
+            return [
+                { title: "1. Наречия частотности", content: "<div class='rule-table'><tr><th>always</th><td>всегда (100%)</td></tr><tr><th>usually</th><td>обычно (90%)</td></tr><tr><th>often</th><td>часто (70%)</td></tr><tr><th>sometimes</th><td>иногда (30%)</td></tr><tr><th>never</th><td>никогда (0%)</td></tr></div><p><strong>Место в предложении:</strong> перед основным глаголом, но после to be.</p><div class='example'>I always drink coffee. / She is never late.</div>" }
+            ];
         }
+        
+        // Дефолтная теория
+        return [{ title: "Теория", content: `<h3>${name}</h3><p>Подробная теория по этой теме будет добавлена в следующем обновлении.</p>` }];
     }
 
-    // Генерация 20 заданий для темы (русские объяснения)
-    function generatePracticeForTopic(topic, level, lang = "English") {
+    // ==================== ГЕНЕРАЦИЯ ЛЕКСИЧЕСКИХ УРОКОВ ====================
+    function getVocabularyList(type) {
+        const lists = {
+            numbers: [{ word: "one", translation: "один" }, { word: "two", translation: "два" }, { word: "three", translation: "три" }, { word: "four", translation: "четыре" }, { word: "five", translation: "пять" }, { word: "six", translation: "шесть" }, { word: "seven", translation: "семь" }, { word: "eight", translation: "восемь" }, { word: "nine", translation: "девять" }, { word: "ten", translation: "десять" }, { word: "first", translation: "первый" }, { word: "second", translation: "второй" }, { word: "third", translation: "третий" }],
+            alphabet: [{ word: "A (ei)", translation: "эй" }, { word: "B (bi:)", translation: "би" }, { word: "C (si:)", translation: "си" }, { word: "D (di:)", translation: "ди" }, { word: "E (i:)", translation: "и" }, { word: "F (ef)", translation: "эф" }, { word: "G (dʒi:)", translation: "джи" }],
+            family: [{ word: "mother", translation: "мама" }, { word: "father", translation: "папа" }, { word: "brother", translation: "брат" }, { word: "sister", translation: "сестра" }, { word: "grandmother", translation: "бабушка" }, { word: "grandfather", translation: "дедушка" }],
+            home: [{ word: "room", translation: "комната" }, { word: "door", translation: "дверь" }, { word: "table", translation: "стол" }, { word: "chair", translation: "стул" }, { word: "bed", translation: "кровать" }, { word: "kitchen", translation: "кухня" }, { word: "bathroom", translation: "ванная" }],
+            daily: [{ word: "get up", translation: "вставать" }, { word: "have breakfast", translation: "завтракать" }, { word: "go to work", translation: "идти на работу" }, { word: "have lunch", translation: "обедать" }, { word: "go to bed", translation: "ложиться спать" }],
+            food: [{ word: "water", translation: "вода" }, { word: "bread", translation: "хлеб" }, { word: "apple", translation: "яблоко" }, { word: "rice", translation: "рис" }, { word: "chicken", translation: "курица" }, { word: "coffee", translation: "кофе" }],
+            clothes: [{ word: "shirt", translation: "рубашка" }, { word: "shoes", translation: "туфли" }, { word: "trousers", translation: "брюки" }, { word: "dress", translation: "платье" }],
+            weather: [{ word: "sun", translation: "солнце" }, { word: "rain", translation: "дождь" }, { word: "hot", translation: "жарко" }, { word: "cold", translation: "холодно" }, { word: "summer", translation: "лето" }, { word: "winter", translation: "зима" }],
+            animals: [{ word: "dog", translation: "собака" }, { word: "cat", translation: "кошка" }, { word: "bird", translation: "птица" }, { word: "fish", translation: "рыба" }],
+            places: [{ word: "shop", translation: "магазин" }, { word: "school", translation: "школа" }, { word: "hospital", translation: "больница" }, { word: "park", translation: "парк" }],
+            transport: [{ word: "car", translation: "машина" }, { word: "bus", translation: "автобус" }, { word: "train", translation: "поезд" }, { word: "plane", translation: "самолёт" }],
+            jobs: [{ word: "teacher", translation: "учитель" }, { word: "doctor", translation: "врач" }, { word: "driver", translation: "водитель" }, { word: "student", translation: "студент" }],
+            adjectives: [{ word: "big", translation: "большой" }, { word: "small", translation: "маленький" }, { word: "good", translation: "хороший" }, { word: "bad", translation: "плохой" }, { word: "cheap", translation: "дешёвый" }, { word: "expensive", translation: "дорогой" }],
+            colours: [{ word: "red", translation: "красный" }, { word: "blue", translation: "синий" }, { word: "yellow", translation: "жёлтый" }, { word: "green", translation: "зелёный" }, { word: "black", translation: "чёрный" }, { word: "white", translation: "белый" }],
+            time: [{ word: "Monday", translation: "понедельник" }, { word: "January", translation: "январь" }, { word: "o'clock", translation: "ровно" }, { word: "half past", translation: "половина" }]
+        };
+        return lists[type] || [{ word: "example", translation: "пример" }];
+    }
+
+    // ==================== ГЕНЕРАЦИЯ ПРАКТИКИ ====================
+    function generatePractice(topic) {
         let tasks = [];
-        const grammar = topic.grammarFocus || "general";
-        for (let i = 0; i < 20; i++) {
-            if (grammar === "to be" || grammar === "present simple") {
-                tasks.push({ type: "input", question: "Поставьте глагол в правильную форму: She ___ (be) a doctor.", correct: "is", aiExplanation: "She + is (3-е лицо единственного числа)" });
-                tasks.push({ type: "choice", question: "Выберите правильный вариант: They ___ playing football now.", options: ["is", "am", "are", "be"], correct: "are", aiExplanation: "They are — форма для множественного числа." });
-                tasks.push({ type: "input", question: "I ___ (like) coffee.", correct: "like", aiExplanation: "I + like (без окончания -s)" });
-            } else if (grammar === "past simple") {
-                tasks.push({ type: "input", question: "Поставьте в Past Simple: Yesterday I ___ (go) to the cinema.", correct: "went", aiExplanation: "Неправильный глагол: go → went (идти → пошёл)" });
-                tasks.push({ type: "input", question: "She ___ (watch) TV last night.", correct: "watched", aiExplanation: "Правильный глагол: watch → watched (смотрела)" });
-            } else if (grammar === "present perfect") {
-                tasks.push({ type: "input", question: "I ___ (never/see) such a beautiful sunset.", correct: "have never seen", aiExplanation: "Present Perfect: have + V3 (никогда не видел)" });
-                tasks.push({ type: "input", question: "She ___ (already/finish) her homework.", correct: "has already finished", aiExplanation: "Present Perfect: has + V3 (уже закончила)" });
-            } else if (grammar === "passive") {
-                tasks.push({ type: "input", question: "The cake ___ (make) by my grandmother.", correct: "was made", aiExplanation: "Пассивный залог: was + V3 (был сделан)" });
-            } else if (grammar === "future") {
-                tasks.push({ type: "input", question: "I ___ (call) you tomorrow.", correct: "will call", aiExplanation: "Future Simple: will + глагол (позвоню)" });
-            } else if (grammar === "modals") {
-                tasks.push({ type: "input", question: "She ___ (can) swim very well.", correct: "can", aiExplanation: "Модальный глагол can (умеет)" });
-            } else {
-                tasks.push({ type: "translate", question: "Переведите слово 'success'", correct: "success", aiExplanation: "success — успех" });
-                tasks.push({ type: "input", question: "She advised that he ___ (go) there.", correct: "go", aiExplanation: "Сослагательное наклонение: advise that + go" });
-            }
+        for (let i = 0; i < 15; i++) {
+            tasks.push({ type: "input", question: "Поставьте слово в правильную форму: She ___ a doctor.", correct: "is", aiExplanation: "She + is (3-е лицо)" });
         }
-        // Перемешиваем и берем 20
         for (let i = tasks.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [tasks[i], tasks[j]] = [tasks[j], tasks[i]];
         }
-        return tasks.slice(0, 20);
+        return tasks.slice(0, 15);
     }
 
-    // Состояние
+    // ==================== СОСТОЯНИЕ ====================
+    let currentTab = "grammar"; // grammar / vocabulary
     let currentLevel = "A1";
-    let topics = KNOWLEDGE_BASE.English[currentLevel] || [];
+    let grammarTopicsList = grammarTopics;
+    let vocabularyTopicsList = vocabularyTopics;
     let completedTopics = JSON.parse(localStorage.getItem("aevi_completed")) || [];
     let mistakeHistory = JSON.parse(localStorage.getItem("aevi_mistakes")) || [];
     let currentTopic = null;
     let currentMode = "topics";
+    let theoryPageIndex = 0;
     let currentPracticeTasks = [];
     let currentTaskIdx = 0;
     let practiceAnswers = [];
@@ -371,12 +241,40 @@
     function saveAll() {
         localStorage.setItem("aevi_completed", JSON.stringify(completedTopics));
         localStorage.setItem("aevi_mistakes", JSON.stringify(mistakeHistory));
-        localStorage.setItem("aevi_level", currentLevel);
     }
 
     function selectTopic(topic) {
         currentTopic = topic;
+        theoryPageIndex = 0;
         currentMode = "theory";
+        renderApp();
+    }
+
+    function nextTheoryPage() {
+        const pages = generateTheory(currentTopic);
+        if (theoryPageIndex + 1 < pages.length) {
+            theoryPageIndex++;
+            renderApp();
+        } else {
+            currentMode = "vocabulary";
+            renderApp();
+        }
+    }
+
+    function prevTheoryPage() {
+        if (theoryPageIndex > 0) {
+            theoryPageIndex--;
+            renderApp();
+        }
+    }
+
+    function goToPractice() {
+        currentPracticeTasks = generatePractice(currentTopic);
+        currentTaskIdx = 0;
+        practiceAnswers = new Array(currentPracticeTasks.length).fill(null);
+        practiceResults = new Array(currentPracticeTasks.length).fill(false);
+        currentMode = "practice";
+        showExplanation = false;
         renderApp();
     }
 
@@ -391,32 +289,16 @@
         mistakeHistory.unshift({ question, correct, userAnswer, grammarFocus, timestamp: Date.now() });
         if (mistakeHistory.length > 200) mistakeHistory.pop();
         saveAll();
-        const recentMistakes = mistakeHistory.slice(0, 10).filter(m => m.grammarFocus === grammarFocus).length;
-        const advice = recentMistakes < 3 
-            ? "Вы прогрессируете, я буду реже спрашивать эту тему." 
-            : "Ошибка повторяется, эта тема будет встречаться чаще.";
-        return { explanation: `Анализ ИИ: Правильный ответ — "${correct}". Вы написали "${userAnswer}". ${grammarFocus ? `Обратите внимание на грамматику: ${grammarFocus}.` : ""} ${advice}` };
+        return { explanation: `🧠 Анализ ИИ: Правильный ответ — "${correct}". Вы написали "${userAnswer}". Обратите внимание на это правило.` };
     }
 
     function startInfinitePractice() {
         let taskPool = [];
-        const grammarSet = new Set(mistakeHistory.slice(0, 30).map(m => m.grammarFocus || "general"));
-        Array.from(grammarSet).forEach(g => {
-            for (let i=0;i<3;i++) taskPool.push({ type: "translate", question: `Практика грамматики [${g}]: переведите "уверенность"`, correct: "confidence", aiExplanation: "Повторение ошибок", grammarFocus: g });
-        });
-        if (taskPool.length<10) taskPool.push({ type: "input", question: "She ___ (to be) happy.", correct: "is", aiExplanation: "She + is", grammarFocus: "to be" });
-        currentPracticeTasks = taskPool.slice(0,20);
-        currentTaskIdx = 0;
-        practiceAnswers = new Array(currentPracticeTasks.length).fill(null);
-        practiceResults = new Array(currentPracticeTasks.length).fill(false);
-        currentMode = "practice";
-        showExplanation = false;
-        renderApp();
-    }
-
-    function startTopicPractice() {
-        if (!currentTopic) return;
-        currentPracticeTasks = generatePracticeForTopic(currentTopic, currentLevel);
+        if (mistakeHistory.length > 0) {
+            taskPool = mistakeHistory.slice(0, 15).map(m => ({ type: "input", question: m.question, correct: m.correct, aiExplanation: "Повторение ошибок" }));
+        }
+        if (taskPool.length < 5) taskPool.push({ type: "input", question: "She ___ happy.", correct: "is", aiExplanation: "She + is" });
+        currentPracticeTasks = taskPool.slice(0, 15);
         currentTaskIdx = 0;
         practiceAnswers = new Array(currentPracticeTasks.length).fill(null);
         practiceResults = new Array(currentPracticeTasks.length).fill(false);
@@ -440,7 +322,7 @@
         practiceAnswers[currentTaskIdx] = answer;
         practiceResults[currentTaskIdx] = isCorrect;
         if (!isCorrect) {
-            const aiResp = registerMistake(task.question, task.correct, answer, task.grammarFocus || "general");
+            const aiResp = registerMistake(task.question, task.correct, answer, currentTopic?.grammarFocus || "general");
             lastMistakeInfo = { explanation: aiResp.explanation };
             showExplanation = true;
             renderApp();
@@ -466,40 +348,78 @@
         const container = document.getElementById('app');
         if (!container) return;
 
-        const topicListHtml = topics.map((t, idx) => {
+        const currentTopics = currentTab === "grammar" ? grammarTopicsList : vocabularyTopicsList;
+        const completedCount = currentTopics.filter(t => completedTopics.includes(t.id)).length;
+
+        const topicListHtml = currentTopics.map((t, idx) => {
             const isCompleted = completedTopics.includes(t.id);
             const isActive = currentTopic && currentTopic.id === t.id;
             return `
                 <div class="topic-item ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}" data-id="${t.id}">
                     <div class="topic-status">${isCompleted ? '✓' : idx+1}</div>
-                    <div class="topic-name">${t.title}</div>
-                    <div class="topic-badge">${t.grammarFocus === 'to be' ? 'глагол to be' : t.grammarFocus === 'present simple' ? 'Present Simple' : t.grammarFocus === 'plural' ? 'мн.число' : t.grammarFocus === 'articles' ? 'артикли' : t.grammarFocus || 'лексика'}</div>
+                    <div class="topic-name">${t.name}</div>
+                    <div class="topic-badge">${currentTab === "grammar" ? 'грамматика' : 'лексика'}</div>
                 </div>
             `;
         }).join('');
-        
-        const completedCount = completedTopics.filter(id => topics.some(t => t.id === id)).length;
-        
+
         let rightPanelHtml = '';
-        
+
         if (currentMode === "topics") {
             rightPanelHtml = `
                 <div class="theory-block">
                     <h2>Выберите тему</h2>
                     <p>Выберите тему из списка слева, чтобы начать обучение.</p>
                     <div class="infinite-practice-area">
-                        <button class="btn-outline btn" id="globalInfiniteBtn">Практика ошибок + слова</button>
+                        <button class="btn-outline btn" id="globalInfiniteBtn">Практика ошибок</button>
                     </div>
                 </div>
             `;
         } else if (currentMode === "theory" && currentTopic) {
+            const pages = generateTheory(currentTopic);
+            const currentPage = pages[theoryPageIndex];
+            const hasNext = theoryPageIndex + 1 < pages.length;
             rightPanelHtml = `
-                <div class="theory-block">
-                    <h2>${currentTopic.title}</h2>
-                    <div class="mistake-stats">Ошибок в теме: ${mistakeHistory.filter(m => m.grammarFocus === currentTopic.grammarFocus).length}</div>
-                    <div style="line-height:1.6; margin: 20px 0;">${currentTopic.theory}</div>
-                    <button class="btn" id="startPracticeBtn">Начать практику (20 заданий)</button>
-                    <button class="btn-outline btn" id="backToTopicsBtn">Назад к темам</button>
+                <div class="theory-page">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h2>${currentTopic.name}</h2>
+                        <span style="color: #8A93B0;">${theoryPageIndex+1}/${pages.length}</span>
+                    </div>
+                    <div>${currentPage.content}</div>
+                    <div class="theory-nav">
+                        <button class="btn-outline btn" id="prevTheoryBtn" ${theoryPageIndex === 0 ? 'disabled style="opacity:0.5"' : ''}>← Назад</button>
+                        <button class="btn" id="nextTheoryBtn">${hasNext ? 'Далее →' : 'К практике →'}</button>
+                    </div>
+                </div>
+            `;
+        } else if (currentMode === "vocabulary" && currentTopic && currentTab === "vocabulary") {
+            const vocabList = getVocabularyList(currentTopic.vocabType);
+            const vocabHtml = `
+                <div style="margin: 24px 0;">
+                    <h3>Словарь: ${currentTopic.name}</h3>
+                    <div class="vocabulary-grid">
+                        ${vocabList.map(v => `<div class="vocab-card"><div class="vocab-word">${v.word}</div><div class="vocab-translation">${v.translation}</div></div>`).join('')}
+                    </div>
+                </div>
+            `;
+            rightPanelHtml = `
+                <div class="theory-page">
+                    <h2>${currentTopic.name}</h2>
+                    ${vocabHtml}
+                    <div class="theory-nav">
+                        <button class="btn-outline btn" id="backToTheoryBtn">← К теории</button>
+                        <button class="btn" id="goToPracticeBtn">Запомнить слова →</button>
+                    </div>
+                </div>
+            `;
+        } else if (currentMode === "vocabulary" && currentTopic && currentTab === "grammar") {
+            rightPanelHtml = `
+                <div class="theory-page">
+                    <h2>${currentTopic.name}</h2>
+                    <div class="theory-nav">
+                        <button class="btn-outline btn" id="backToTheoryBtn">← К теории</button>
+                        <button class="btn" id="goToPracticeBtn">Перейти к практике →</button>
+                    </div>
                 </div>
             `;
         } else if (currentMode === "practice" && currentPracticeTasks.length) {
@@ -509,13 +429,13 @@
             rightPanelHtml = `
                 <div class="practice-block">
                     <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
-                        <h3>Практика: ${currentTopic?.title || 'Практика ошибок'}</h3>
+                        <h3>Практика: ${currentTopic?.name || 'Практика ошибок'}</h3>
                         <span>${currentTaskIdx+1}/${currentPracticeTasks.length}</span>
                     </div>
                     <div class="progress"><div class="progress-fill" style="width:${(currentTaskIdx/currentPracticeTasks.length)*100}%"></div></div>
                     <div class="practice-question">
                         <p><strong>${task.question}</strong></p>
-                        ${task.type === 'choice' ? `<div class="options">${task.options.map(opt => `<div class="option" data-val="${opt}">${opt}</div>`).join('')}</div>` : `<input type="text" id="answerField" class="practice-input" placeholder="Ваш ответ..." value="${userAnswer || ''}">`}
+                        <input type="text" id="answerField" class="practice-input" placeholder="Ваш ответ..." value="${userAnswer || ''}">
                         <button class="btn" id="submitAnswerBtn" style="margin-top:12px">${isAnswered ? 'Изменить' : 'Проверить'}</button>
                         ${showExplanation && lastMistakeInfo ? `<div class="ai-explanation">${lastMistakeInfo.explanation}</div>` : ''}
                     </div>
@@ -542,72 +462,56 @@
         container.innerHTML = `
             <div class="topics-panel">
                 <div class="topics-header">
-                    <h3><span class="glow-text">Aevi</span> · ${currentLevel}</h3>
-                    <select id="levelSelect" class="level-selector">
-                        <option value="A1" ${currentLevel==='A1' ? 'selected' : ''}>Уровень A1 (Начальный)</option>
-                        <option value="A2" ${currentLevel==='A2' ? 'selected' : ''}>Уровень A2 (Элементарный)</option>
-                        <option value="B1" ${currentLevel==='B1' ? 'selected' : ''}>Уровень B1 (Средний)</option>
-                        <option value="B2" ${currentLevel==='B2' ? 'selected' : ''}>Уровень B2 (Выше среднего)</option>
-                        <option value="C1" ${currentLevel==='C1' ? 'selected' : ''}>Уровень C1 (Продвинутый)</option>
-                        <option value="C2" ${currentLevel==='C2' ? 'selected' : ''}>Уровень C2 (Профессиональный)</option>
-                    </select>
+                    <h3><span class="glow-text">Aevi</span> · A1</h3>
                 </div>
-                <div class="progress"><div class="progress-fill" style="width:${(completedCount/topics.length)*100}%"></div></div>
-                <div class="topic-list" id="topicList">
-                    ${topicListHtml}
+                <div class="tab-switch">
+                    <div class="tab-btn ${currentTab === 'grammar' ? 'active' : ''}" data-tab="grammar">📖 Грамматика</div>
+                    <div class="tab-btn ${currentTab === 'vocabulary' ? 'active' : ''}" data-tab="vocabulary">📚 Лексика</div>
                 </div>
+                <div class="progress"><div class="progress-fill" style="width:${(completedCount/currentTopics.length)*100}%"></div></div>
+                <div class="topic-list" id="topicList">${topicListHtml}</div>
                 <div class="infinite-practice-area">
-                    <button class="btn-outline btn" id="globalInfiniteBtn">Практика ошибок + слова</button>
+                    <button class="btn-outline btn" id="globalInfiniteBtn">Практика ошибок</button>
                 </div>
             </div>
             <div class="content-panel" id="rightPanel">${rightPanelHtml}</div>
         `;
 
-        document.getElementById('levelSelect')?.addEventListener('change', (e) => {
-            currentLevel = e.target.value;
-            topics = KNOWLEDGE_BASE.English[currentLevel] || [];
-            currentTopic = null;
-            currentMode = "topics";
-            saveAll();
-            renderApp();
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                currentTab = btn.dataset.tab;
+                currentTopic = null;
+                currentMode = "topics";
+                renderApp();
+            });
         });
-        
+
         document.querySelectorAll('.topic-item').forEach(el => {
             const topicId = el.dataset.id;
-            const topic = topics.find(t => t.id === topicId);
+            const topic = currentTopics.find(t => t.id === topicId);
             if (topic) {
                 el.addEventListener('click', () => selectTopic(topic));
             }
         });
-        
-        document.getElementById('startPracticeBtn')?.addEventListener('click', startTopicPractice);
+
+        document.getElementById('prevTheoryBtn')?.addEventListener('click', prevTheoryPage);
+        document.getElementById('nextTheoryBtn')?.addEventListener('click', nextTheoryPage);
+        document.getElementById('backToTheoryBtn')?.addEventListener('click', () => {
+            theoryPageIndex = 0;
+            currentMode = "theory";
+            renderApp();
+        });
+        document.getElementById('goToPracticeBtn')?.addEventListener('click', goToPractice);
         document.getElementById('backToTopicsBtn')?.addEventListener('click', backToTopics);
         document.getElementById('globalInfiniteBtn')?.addEventListener('click', startInfinitePractice);
-        
+
         document.getElementById('submitAnswerBtn')?.addEventListener('click', () => {
-            let answer = '';
-            const task = currentPracticeTasks[currentTaskIdx];
-            if (task.type === 'choice') {
-                const selected = document.querySelector('.option.selected');
-                if (!selected) return;
-                answer = selected.dataset.val;
-            } else {
-                const field = document.getElementById('answerField');
-                if (!field) return;
-                answer = field.value.trim();
-            }
-            checkCurrentTask(answer);
-        });
-        
-        document.querySelectorAll('.option').forEach(opt => {
-            opt.addEventListener('click', function() {
-                if (practiceAnswers[currentTaskIdx] !== null) return;
-                document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-                this.classList.add('selected');
-            });
+            const field = document.getElementById('answerField');
+            if (!field) return;
+            checkCurrentTask(field.value.trim());
         });
     }
-    
+
     renderApp();
 </script>
 </body>
