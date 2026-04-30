@@ -1,0 +1,134 @@
+# Файл: docker-compose.yml
+
+version: '3.8'
+
+services:
+  # PostgreSQL база данных
+  postgres:
+    image: postgres:15-alpine
+    container_name: aevi_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: aevi_db
+      POSTGRES_USER: aevi_user
+      POSTGRES_PASSWORD: aevi_secure_password_2024
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aevi_user -d aevi_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aevi_network
+
+  # Redis для кэша и очередей
+  redis:
+    image: redis:7-alpine
+    container_name: aevi_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aevi_network
+
+  # Бэкенд FastAPI
+  backend:
+    build: ./backend
+    container_name: aevi_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://aevi_user:aevi_secure_password_2024@postgres:5432/aevi_db
+      REDIS_URL: redis://redis:6379/0
+      BOT_TOKEN: ${BOT_TOKEN}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY}
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: "false"
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      ADMIN_IDS: ${ADMIN_IDS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - backend_uploads:/app/uploads
+      - backend_audio:/app/audio_cache
+    ports:
+      - "8000:8000"
+    networks:
+      - aevi_network
+    command: >
+      sh -c "python -m app.database.seed_data &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+  # Фронтенд React + Nginx
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aevi_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - aevi_network
+
+  # Миграции Alembic (запускаются один раз)
+  migrations:
+    build: ./backend
+    container_name: aevi_migrations
+    environment:
+      DATABASE_URL: postgresql+asyncpg://aevi_user:aevi_secure_password_2024@postgres:5432/aevi_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - aevi_network
+    command: >
+      sh -c "alembic upgrade head && echo 'Migrations completed'"
+    profiles:
+      - migrations
+
+  # PgAdmin для управления БД (опционально, для разработки)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: aevi_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@aevi.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - aevi_network
+    profiles:
+      - dev
+
+networks:
+  aevi_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  backend_uploads:
+  backend_audio:

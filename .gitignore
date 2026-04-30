@@ -1,0 +1,77 @@
+# Файл: .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+dist/
+dist-ssr/
+*.local
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.docker
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+*.pid
+
+# Uploads
+uploads/
+audio_cache/
+media/
+
+# Docker
+*.pid
+*.lock
+
+# Secrets
+*.pem
+*.key
+*.crt
+
+# Telegram
+bot_token.txt
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
